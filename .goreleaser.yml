@@ -9,9 +9,23 @@ builds:
       - amd64
       - arm64
 nfpms:
-- maintainer: Henry Whitaker <henrywhitaker3@outlook.com>
-  description: A CLI to execute commands and update healthcheck.io checks with the result
-  homepage: https://github.com/henrywhitaker3/go-healthcheck
-  license: MIT
-  formats:
-  - deb
+  - maintainer: Henry Whitaker <henrywhitaker3@outlook.com>
+
+    description: A CLI to execute commands and update healthcheck.io checks with the result
+
+    homepage: https://github.com/henrywhitaker3/go-healthcheck
+
+    license: MIT
+
+    formats:
+      - deb
+
+    contents:
+      - src: build/healthcheck.service
+        dst: /etc/systemd/system/healthcheck.service
+
+      - src: build/healthcheck.yaml
+        dst: /etc/healthcheck/healthcheck.yaml
+
+    scripts:
+      preremove: build/preremove.sh

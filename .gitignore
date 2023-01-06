@@ -1,4 +1,4 @@
-healthcheck.yaml
+/healthcheck.yaml
 
 build/bin
 dist/
