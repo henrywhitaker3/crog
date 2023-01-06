@@ -12,7 +12,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// workCmd represents the work command
 var workCmd = &cobra.Command{
 	Use:   "work",
 	Short: "Run the check daemon",
