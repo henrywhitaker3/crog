@@ -48,7 +48,7 @@ func init() {
 	rootCmd.AddCommand(workCmd)
 }
 
-func runCheck(check *check.Check) {
+func runCheck(check check.Check) {
 	log.ForceInfof("Running schduled command '%s'", check.Name)
 	check.Execute()
 }
