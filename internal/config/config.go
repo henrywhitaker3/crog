@@ -12,14 +12,16 @@ import (
 )
 
 type Config struct {
-	Version string        `yaml:"version"`
-	Checks  []check.Check `yaml:"checks"`
+	Version  string        `yaml:"version"`
+	Checks   []check.Check `yaml:"checks"`
+	Verbose  *bool         `yaml:"verbose"`
+	Timezone string        `yaml:"timezone"`
 }
 
 // TODO: unmarshall to set defaults e.g. utc timezone
 
 func LoadConfig(path string) (*Config, error) {
-	log.ForceInfof("Loading config file from %s", path)
+	log.Infof("Loading config file from %s", path)
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
@@ -30,6 +32,11 @@ func LoadConfig(path string) (*Config, error) {
 	err = yaml.Unmarshal(data, config)
 	if err != nil {
 		return nil, err
+	}
+
+	if config.Verbose == nil {
+		v := false
+		config.Verbose = &v
 	}
 
 	if structs.HasZero(config) {
