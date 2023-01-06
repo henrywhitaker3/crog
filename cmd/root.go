@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/henrywhitaker3/go-healthcheck/internal/config"
+	"github.com/henrywhitaker3/go-healthcheck/internal/log"
 	"github.com/spf13/cobra"
 )
 
@@ -52,6 +53,7 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVarP(&cfgPath, "config", "c", "healthcheck.yaml", "config file (default is healthcheck.yaml)")
+	rootCmd.PersistentFlags().BoolVarP(&log.Verbose, "verbose", "v", false, "Turn on verbose logging")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.

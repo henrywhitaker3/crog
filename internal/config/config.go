@@ -15,6 +15,8 @@ type Config struct {
 	Checks  []check.Check `yaml:"checks"`
 }
 
+// TODO: unmarshall to set defaults e.g. utc timezone
+
 func LoadConfig(path string) (*Config, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
