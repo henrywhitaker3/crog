@@ -22,6 +22,28 @@ tasks:
           OS: linux
           ARCH: arm
 
+  pkg:linux:amd64:
+    cmds:
+      - task: pkg
+        vars:
+          OS: linux
+          ARCH: amd64
+
   build:
     cmds:
       - GOOS={{ .OS }} GOARCH={{ .ARCH }} go build -o build/bin/healthcheck_$(go run main.go --version | grep -Eo "[0-9]+\.[0-9]+\.[0-9]")_{{ .OS }}-{{ .ARCH }}
+
+  pkg:
+    vars:
+      APP_VERSION:
+        sh: go run main.go --version | grep -Eo '[0-9]+\.[0-9]+\.[0-9]'
+    cmds: 
+      - "sed -i \"s/Version:/Version: {{ .APP_VERSION }}/g\" build/deb/DEBIAN/control"
+      - "sed -i \"s/Architecture:/Architecture: {{ .ARCH }}/g\" build/deb/DEBIAN/control"
+      - mkdir -p build/deb/usr/local/bin
+      - cp build/bin/healthcheck_{{ .APP_VERSION }}_{{ .OS }}-{{ .ARCH }} build/deb/usr/local/bin/healthcheck
+      - dpkg-deb --build --root-owner-group build/deb
+      - mv build/deb.deb build/bin/healthcheck_{{ .APP_VERSION }}_{{ .OS }}-{{ .ARCH }}.deb
+      - rm build/deb/usr/local/bin/healthcheck
+      - "sed -i \"s/Version: {{ .APP_VERSION }}/Version:/g\" build/deb/DEBIAN/control"
+      - "sed -i \"s/Architecture: {{ .ARCH }}/Architecture:/g\" build/deb/DEBIAN/control"
