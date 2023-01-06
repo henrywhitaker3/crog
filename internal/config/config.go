@@ -47,19 +47,13 @@ func LoadConfig(path string) (*Config, error) {
 }
 
 func (cfg *Config) GetCheck(name string) (*check.Check, error) {
-	var check *check.Check
-
 	for _, chk := range cfg.Checks {
 		if chk.Name == name {
-			check = &chk
+			return &chk, nil
 		}
 	}
 
-	if check == nil {
-		return nil, fmt.Errorf("could not find check")
-	}
-
-	return check, nil
+	return nil, fmt.Errorf("could not find check")
 }
 
 func (cfg *Config) PrintCheckTable() error {
