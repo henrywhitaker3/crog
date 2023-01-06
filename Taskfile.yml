@@ -1,0 +1,7 @@
+version: '3'
+
+tasks:
+  build:linux:amd64:
+    cmds:
+      - GOOS=linux GOARCH=amd64 go build -o build/healthcheck_{{ .VERSION }}_linux-amd64
+      

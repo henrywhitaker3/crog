@@ -6,6 +6,7 @@ import (
 
 	"github.com/fatih/structs"
 	"github.com/henrywhitaker3/go-healthcheck/internal/check"
+	"github.com/henrywhitaker3/go-healthcheck/internal/log"
 	"github.com/pterm/pterm"
 	"gopkg.in/yaml.v3"
 )
@@ -18,6 +19,7 @@ type Config struct {
 // TODO: unmarshall to set defaults e.g. utc timezone
 
 func LoadConfig(path string) (*Config, error) {
+	log.ForceInfof("Loading config file from %s", path)
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
