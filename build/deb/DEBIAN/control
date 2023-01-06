@@ -1,0 +1,5 @@
+Package: healthcheck
+Version: 0.1.0
+Architecture: amd64
+Maintainer: Henry Whitaker <henrywhitaker3@outlook.com>
+Description: A CLI to execute commands and update healthcheck.io checks with the result

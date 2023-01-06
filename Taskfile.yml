@@ -24,4 +24,4 @@ tasks:
 
   build:
     cmds:
-      - GOOS={{ .OS }} GOARCH={{ .ARCH }} go build -o build/healthcheck_$(go run main.go --version | grep -Eo "[0-9]+\.[0-9]+\.[0-9]")_{{ .OS }}-{{ .ARCH }}
+      - GOOS={{ .OS }} GOARCH={{ .ARCH }} go build -o build/bin/healthcheck_$(go run main.go --version | grep -Eo "[0-9]+\.[0-9]+\.[0-9]")_{{ .OS }}-{{ .ARCH }}

@@ -1,0 +1,22 @@
+cat <<EOF
+go-healthcek has been installed as a systemd service.
+
+To start/stop test-foo:
+
+sudo systemctl start healthcheck
+sudo systemctl stop healthcheck
+
+To enable/disable test-foo starting automatically on boot:
+
+sudo systemctl enable healthcheck
+sudo systemctl disable healthcheck
+
+To reload healthcheck:
+
+sudo systemctl restart healthcheck
+
+To view healthcheck logs:
+
+journalctl -f -u healthcheck
+
+EOF
