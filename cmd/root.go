@@ -15,8 +15,9 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "go-healthcheck",
-	Short: "A CLI to execute commands and ping healthcheck.io endpoints when they are successful or",
+	Use:     "healthcheck",
+	Version: "0.1.0",
+	Short:   "A CLI to execute commands and ping healthcheck.io endpoints when they are successful or",
 	Long: `A longer description that spans multiple lines and likely contains
 examples and usage of using your application. For example:
 
