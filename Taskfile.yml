@@ -3,12 +3,25 @@ version: '3'
 tasks:
   build:linux:amd64:
     cmds:
-      - GOOS=linux GOARCH=amd64 go build -o build/healthcheck_$(go run main.go --version | grep -Eo "[0-9]+\.[0-9]+\.[0-9]")_linux-amd64
+      - task: build
+        vars:
+          OS: linux
+          ARCH: amd64
       
   build:linux:arm64:
     cmds:
-      - GOOS=linux GOARCH=arm64 go build -o build/healthcheck_$(go run main.go --version | grep -Eo "[0-9]+\.[0-9]+\.[0-9]")_linux-arm64
+      - task: build
+        vars:
+          OS: linux
+          ARCH: arm64
       
   build:linux:arm:
     cmds:
-      - GOOS=linux GOARCH=arm go build -o build/healthcheck_$(go run main.go --version | grep -Eo "[0-9]+\.[0-9]+\.[0-9]")_linux-arm
+      - task: build
+        vars:
+          OS: linux
+          ARCH: arm
+
+  build:
+    cmds:
+      - GOOS={{ .OS }} GOARCH={{ .ARCH }} go build -o build/healthcheck_$(go run main.go --version | grep -Eo "[0-9]+\.[0-9]+\.[0-9]")_{{ .OS }}-{{ .ARCH }}
