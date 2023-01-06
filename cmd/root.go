@@ -17,13 +17,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:     "healthcheck",
 	Version: "0.1.0",
-	Short:   "A CLI to execute commands and ping healthcheck.io endpoints when they are successful or",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short:   "A CLI to execute commands and update healthcheck.io checks with the result",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
