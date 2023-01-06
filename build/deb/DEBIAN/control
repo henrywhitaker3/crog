@@ -1,5 +1,0 @@
-Package: healthcheck
-Version:
-Architecture:
-Maintainer: Henry Whitaker <henrywhitaker3@outlook.com>
-Description: A CLI to execute commands and update healthcheck.io checks with the result

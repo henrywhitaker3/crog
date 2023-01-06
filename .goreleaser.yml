@@ -1,0 +1,17 @@
+project_name: healthcheck
+builds:
+  - env: [CGO_ENABLED=0]
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+nfpms:
+- maintainer: Henry Whitaker <henrywhitaker3@outlook.com>
+  description: A CLI to execute commands and update healthcheck.io checks with the result
+  homepage: https://github.com/henrywhitaker3/go-healthcheck
+  license: MIT
+  formats:
+  - deb
