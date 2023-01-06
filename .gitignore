@@ -1,0 +1,6 @@
+healthcheck.yaml
+
+bin/
+
+# Go workspace file
+go.work
