@@ -26,11 +26,11 @@ func ForceInfof(format string, args ...any) {
 }
 
 func Error(value string) {
-	printLog("Error", value)
+	printLog("ERROR", value)
 }
 
 func ForceError(value string) {
-	print("Error", value)
+	print("ERROR", value)
 }
 
 func Errorf(format string, args ...any) {

@@ -24,9 +24,9 @@ func (c *Check) Execute() error {
 	code, _ := c.runCommand()
 
 	if code != c.Code {
-		c.LogError(fmt.Sprintf("Check failed, expected status %d, got %d", c.Code, code))
+		c.LogError(fmt.Sprintf("Check failed - expected status %d, got %d", c.Code, code))
 		c.failCheck()
-		return fmt.Errorf("check failed, expected status %d, got %d", c.Code, code)
+		return fmt.Errorf("check failed - expected status %d, got %d", c.Code, code)
 	}
 
 	c.LogInfo("Check passed")
