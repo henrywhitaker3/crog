@@ -1,4 +1,4 @@
-module github.com/henrywhitaker3/go-healthcheck
+module github.com/henrywhitaker3/crog
 
 go 1.18
 

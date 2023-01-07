@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/henrywhitaker3/go-healthcheck/internal/check"
-	"github.com/henrywhitaker3/go-healthcheck/internal/log"
-	"github.com/henrywhitaker3/go-healthcheck/internal/validation"
+	"github.com/henrywhitaker3/crog/internal/check"
+	"github.com/henrywhitaker3/crog/internal/log"
+	"github.com/henrywhitaker3/crog/internal/validation"
 	"github.com/pterm/pterm"
 	"gopkg.in/yaml.v3"
 )

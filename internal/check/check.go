@@ -6,8 +6,8 @@ import (
 	"os/exec"
 
 	"github.com/google/shlex"
-	"github.com/henrywhitaker3/go-healthcheck/internal/log"
-	"github.com/henrywhitaker3/go-healthcheck/internal/validation"
+	"github.com/henrywhitaker3/crog/internal/log"
+	"github.com/henrywhitaker3/crog/internal/validation"
 )
 
 type Check struct {

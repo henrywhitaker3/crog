@@ -1,9 +1,9 @@
 [Unit]
-Description=healthcheck
+Description=crog
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/healthcheck work --config /etc/healthcheck/healthcheck.yaml
+ExecStart=/usr/bin/crog work --config /etc/crog/crog.yaml
 StandardOutput=inherit
 StandardError=inherit
 Restart=always

@@ -3,7 +3,7 @@ package check_test
 import (
 	"testing"
 
-	"github.com/henrywhitaker3/go-healthcheck/internal/check"
+	"github.com/henrywhitaker3/crog/internal/check"
 )
 
 func TestItReturnsAnErrorIfTheNameIsNotSet(t *testing.T) {

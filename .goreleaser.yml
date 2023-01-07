@@ -1,4 +1,4 @@
-project_name: healthcheck
+project_name: crog
 builds:
   - env: [CGO_ENABLED=0]
     goos:
@@ -11,9 +11,9 @@ builds:
 nfpms:
   - maintainer: Henry Whitaker <henrywhitaker3@outlook.com>
 
-    description: A CLI to execute commands and update healthcheck.io checks with the result
+    description: A CLI tool to setup scheduled tasks and call URLs based on the result, configured in yaml
 
-    homepage: https://github.com/henrywhitaker3/go-healthcheck
+    homepage: https://github.com/henrywhitaker3/crog
 
     license: MIT
 
@@ -21,11 +21,11 @@ nfpms:
       - deb
 
     contents:
-      - src: build/healthcheck.service
-        dst: /etc/systemd/system/healthcheck.service
+      - src: build/crog.service
+        dst: /etc/systemd/system/crog.service
 
-      - src: build/healthcheck.yaml
-        dst: /etc/healthcheck/healthcheck.yaml
+      - src: build/crog.yaml
+        dst: /etc/crog/crog.yaml
 
     scripts:
       preremove: build/preremove.sh

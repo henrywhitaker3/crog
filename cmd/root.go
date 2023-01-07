@@ -8,16 +8,16 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/henrywhitaker3/go-healthcheck/internal/config"
-	"github.com/henrywhitaker3/go-healthcheck/internal/log"
+	"github.com/henrywhitaker3/crog/internal/config"
+	"github.com/henrywhitaker3/crog/internal/log"
 	"github.com/spf13/cobra"
 )
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:     "healthcheck",
+	Use:     "crog",
 	Version: "0.1.7",
-	Short:   "A CLI to execute commands and update healthcheck.io checks with the result",
+	Short:   "A CLI tool to setup scheduled tasks and call URLs based on the result, configured in yaml.",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },

@@ -11,8 +11,8 @@ import (
 	"time"
 
 	"github.com/go-co-op/gocron"
-	"github.com/henrywhitaker3/go-healthcheck/internal/check"
-	"github.com/henrywhitaker3/go-healthcheck/internal/log"
+	"github.com/henrywhitaker3/crog/internal/check"
+	"github.com/henrywhitaker3/crog/internal/log"
 	"github.com/spf13/cobra"
 )
 
