@@ -16,7 +16,7 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:     "healthcheck",
-	Version: "0.1.6",
+	Version: "0.1.7",
 	Short:   "A CLI to execute commands and update healthcheck.io checks with the result",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
