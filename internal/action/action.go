@@ -2,6 +2,7 @@ package action
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os/exec"
 
@@ -16,6 +17,12 @@ type Action struct {
 	Code    int    `yaml:"code" default:"0"`
 	Cron    string `yaml:"cron" default:"* * * * *"`
 	On      On     `yaml:"when" requred:"true"`
+}
+
+var client *http.Client
+
+func init() {
+	client = &http.Client{}
 }
 
 func (a *Action) Execute() error {
@@ -99,14 +106,17 @@ func (a *Action) request(url string) error {
 	}
 	req.Header.Set("User-Agent", "Crog")
 
-	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
 
-	a.LogInfo(fmt.Sprintf("Got status code: %d", resp.StatusCode))
+	a.LogInfo(fmt.Sprintf("Got status code: %d, body:\n%s", resp.StatusCode, string(body)))
 
 	return nil
 }
