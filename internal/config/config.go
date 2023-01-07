@@ -73,5 +73,11 @@ func (cfg *Config) Validate() error {
 		return err
 	}
 
+	for i, check := range cfg.Checks {
+		if err := check.Validate(); err != nil {
+			return fmt.Errorf("checks[%d]: %s", i, err)
+		}
+	}
+
 	return nil
 }
