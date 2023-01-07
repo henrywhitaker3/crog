@@ -7,14 +7,15 @@ import (
 
 	"github.com/google/shlex"
 	"github.com/henrywhitaker3/go-healthcheck/internal/log"
+	"github.com/henrywhitaker3/go-healthcheck/internal/validation"
 )
 
 type Check struct {
-	Name    string `yaml:"name"`
-	Command string `yaml:"command"`
-	Id      string `yaml:"id"`
-	Code    int    `yaml:"code"`
-	Cron    string `yaml:"cron"`
+	Name    string `yaml:"name" required:"true"`
+	Command string `yaml:"command" required:"true"`
+	Id      string `yaml:"id" required:"true"`
+	Code    int    `yaml:"code" default:"0"`
+	Cron    string `yaml:"cron" default:"* * * * *"`
 }
 
 func (c *Check) Execute() error {
@@ -85,4 +86,8 @@ func (c *Check) failCheck() error {
 	_, err := http.Get(fmt.Sprintf("https://hc-ping.com/%s/fail", c.Id))
 
 	return err
+}
+
+func (c *Check) Validate() error {
+	return validation.Validate(c)
 }

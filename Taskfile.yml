@@ -1,63 +1,10 @@
 version: '3'
 
 tasks:
-  build:linux:amd64:
+  fmt:
     cmds:
-      - task: build
-        vars:
-          OS: linux
-          ARCH: amd64
-      
-  build:linux:arm64:
-    cmds:
-      - task: build
-        vars:
-          OS: linux
-          ARCH: arm64
-      
-  build:linux:arm:
-    cmds:
-      - task: build
-        vars:
-          OS: linux
-          ARCH: arm
+      - go fmt
 
-  pkg:linux:amd64:
+  test:
     cmds:
-      - task: pkg
-        vars:
-          OS: linux
-          ARCH: amd64
-
-  pkg:linux:arm64:
-    cmds:
-      - task: pkg
-        vars:
-          OS: linux
-          ARCH: arm64
-
-  pkg:linux:arm:
-    cmds:
-      - task: pkg
-        vars:
-          OS: linux
-          ARCH: arm
-
-  build:
-    cmds:
-      - CGO_ENABLED=0 GOOS={{ .OS }} GOARCH={{ .ARCH }} go build -o build/bin/healthcheck_$(go run main.go --version | grep -Eo "[0-9]+\.[0-9]+\.[0-9]")_{{ .OS }}-{{ .ARCH }}
-
-  pkg:
-    vars:
-      APP_VERSION:
-        sh: go run main.go --version | grep -Eo '[0-9]+\.[0-9]+\.[0-9]'
-    cmds: 
-      - "sed -i \"s/Version:/Version: {{ .APP_VERSION }}/g\" build/deb/DEBIAN/control"
-      - "sed -i \"s/Architecture:/Architecture: {{ .ARCH }}/g\" build/deb/DEBIAN/control"
-      - mkdir -p build/deb/usr/local/bin
-      - cp build/bin/healthcheck_{{ .APP_VERSION }}_{{ .OS }}-{{ .ARCH }} build/deb/usr/local/bin/healthcheck
-      - dpkg-deb --build --root-owner-group build/deb
-      - mv build/deb.deb build/bin/healthcheck_{{ .APP_VERSION }}_{{ .OS }}-{{ .ARCH }}.deb
-      - rm build/deb/usr/local/bin/healthcheck
-      - "sed -i \"s/Version: {{ .APP_VERSION }}/Version:/g\" build/deb/DEBIAN/control"
-      - "sed -i \"s/Architecture: {{ .ARCH }}/Architecture:/g\" build/deb/DEBIAN/control"
+      - go test ./...
