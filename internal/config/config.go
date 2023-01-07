@@ -55,11 +55,11 @@ func (cfg *Config) GetAction(name string) (*action.Action, error) {
 
 func (cfg *Config) PrintActionTable() error {
 	lines := [][]string{
-		{"Name", "ID", "Command", "Code"},
+		{"Name", "Command", "Code"},
 	}
 
 	for _, action := range cfg.Actions {
-		lines = append(lines, []string{action.Name, action.Id, action.Command, fmt.Sprintf("%d", action.Code)})
+		lines = append(lines, []string{action.Name, action.Command, fmt.Sprintf("%d", action.Code)})
 	}
 	return pterm.DefaultTable.WithHasHeader().WithData(lines).Render()
 }

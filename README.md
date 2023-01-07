@@ -8,7 +8,7 @@ CLI tool to setup scheduled tasks and call URLs based on the result, configured 
 
 1. Download the latest deb for your system from the [releases](https://github.com/henrywhitaker3/crog/releases) page.
 2. Install the package: `sudo dpkg -i <name>.deb`
-3. Add your checks to `/etc/crog/crog.yaml`
+3. Add your actions to `/etc/crog/crog.yaml`
 4. Start the service `sudo systemctl start crog.service`
 5. Enable the service to start on boot: `sudo systemctl enable crog.service`
 
@@ -23,22 +23,22 @@ CLI tool to setup scheduled tasks and call URLs based on the result, configured 
 
 ## Configuration
 
-The config is defined in yaml, and the systemd service looks at `/etc/crog/crog.yaml` by default. Here is an example file with 1 check that pings `8.8.8.8` every minute, and mark the healtchecks.io check failed if it cannot reach it:
+The config is defined in yaml, and the systemd service looks at `/etc/crog/crog.yaml` by default. Here is an example file with 1 check that pings `8.8.8.8` every minute, and mark a healtchecks.io check failed if it cannot reach it:
 
 ```yaml
 version: 1
 verbose: true # enables verbose log output
 timezone: UTC
 
-checks:
+actions:
   - name: Ping google dns # The name of the check
     command: ping -W 1 -c 1 8.8.8.8 # The command to run
     code: 0 # The expected return code
     cron: "* * * * *" # The schedule the command will run on
     on:
-      start: https://example.com/ping-google-dns/start
-      success: https://example.com/ping-google-dns
-      failure: https://example.com/ping-google-dns/fail
+      start: https://example.com/ping-google-dns/start # Called before the command is run, optional
+      success: https://example.com/ping-google-dns # Called if the action is successful, required
+      failure: https://example.com/ping-google-dns/fail # Called if the command doesn't return the desired exit code, optional
 ```
 
 ## Usage

@@ -13,26 +13,26 @@ import (
 type Action struct {
 	Name    string `yaml:"name" required:"true"`
 	Command string `yaml:"command" required:"true"`
-	Id      string `yaml:"id" required:"true"`
 	Code    int    `yaml:"code" default:"0"`
 	Cron    string `yaml:"cron" default:"* * * * *"`
+	On      On     `yaml:"on" requred:"true"`
 }
 
 func (a *Action) Execute() error {
 	a.LogInfo("Executing check")
-	a.startCheck()
+	a.start()
 
 	code, _ := a.runCommand()
 
 	if code != a.Code {
 		a.LogError(fmt.Sprintf("Check failed - expected status %d, got %d", a.Code, code))
-		a.failCheck()
+		a.fail()
 		return fmt.Errorf("check failed - expected status %d, got %d", a.Code, code)
 	}
 
 	a.LogInfo("Check passed")
 
-	a.completeCheck()
+	a.success()
 
 	return nil
 }
@@ -68,28 +68,37 @@ func (a *Action) runCommand() (int, string) {
 	return exitCode, string(out)
 }
 
-func (a *Action) startCheck() error {
-	a.LogInfo("Sending start GET request for check")
+func (a *Action) start() error {
+	if a.On.Start == "" {
+		return nil
+	}
 
-	_, err := http.Get(fmt.Sprintf("https://hc-ping.com/%s/start", a.Id))
-
-	return err
-}
-func (a *Action) completeCheck() error {
-	a.LogInfo("Sending finish GET request for check")
-
-	_, err := http.Get(fmt.Sprintf("https://hc-ping.com/%s", a.Id))
+	a.LogInfo("Sending start request for check")
+	_, err := http.Get(a.On.Start)
 
 	return err
 }
-func (a *Action) failCheck() error {
-	a.LogInfo("Sending fail GET request for check")
+func (a *Action) success() error {
+	a.LogInfo("Sending success request for check")
 
-	_, err := http.Get(fmt.Sprintf("https://hc-ping.com/%s/fail", a.Id))
+	_, err := http.Get(a.On.Success)
+
+	return err
+}
+func (a *Action) fail() error {
+	if a.On.Failure == "" {
+		return nil
+	}
+
+	a.LogInfo("Sending failure request for check")
+	_, err := http.Get(a.On.Failure)
 
 	return err
 }
 
 func (a *Action) Validate() error {
+	if err := a.On.Validate(); err != nil {
+		return err
+	}
 	return validation.Validate(a)
 }
