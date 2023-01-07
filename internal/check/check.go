@@ -46,7 +46,7 @@ func (c *Check) LogError(value string) {
 }
 
 func (c *Check) runCommand() (int, string) {
-	c.LogInfo("Running check command")
+	c.LogInfo(fmt.Sprintf("Running command: '%s'", c.Command))
 	args, _ := shlex.Split(c.Command)
 	bin := args[0]
 	args = args[1:]
