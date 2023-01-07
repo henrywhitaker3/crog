@@ -74,26 +74,41 @@ func (a *Action) start() error {
 	}
 
 	a.LogInfo("Sending start request for check")
-	_, err := http.Get(a.On.Start)
-
-	return err
+	return a.request(a.On.Start)
 }
+
 func (a *Action) success() error {
 	a.LogInfo("Sending success request for check")
 
-	_, err := http.Get(a.On.Success)
-
-	return err
+	return a.request(a.On.Success)
 }
+
 func (a *Action) fail() error {
 	if a.On.Failure == "" {
 		return nil
 	}
 
 	a.LogInfo("Sending failure request for check")
-	_, err := http.Get(a.On.Failure)
+	return a.request(a.On.Failure)
+}
 
-	return err
+func (a *Action) request(url string) error {
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return err
+	}
+	req.Header.Set("User-Agent", "Crog")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	a.LogInfo(fmt.Sprintf("Got status code: %d", resp.StatusCode))
+
+	return nil
 }
 
 func (a *Action) Validate() error {
