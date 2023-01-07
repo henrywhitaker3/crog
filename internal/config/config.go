@@ -32,12 +32,9 @@ func LoadConfig(path string) (*Config, error) {
 		return nil, err
 	}
 
-	fmt.Println(config)
-
 	if err := config.Validate(); err != nil {
 		return nil, err
 	}
-	fmt.Println(config)
 
 	// if structs.HasZero(config) {
 	// 	return nil, fmt.Errorf("invalid configuration file")
