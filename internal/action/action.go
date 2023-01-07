@@ -15,7 +15,7 @@ type Action struct {
 	Command string `yaml:"command" required:"true"`
 	Code    int    `yaml:"code" default:"0"`
 	Cron    string `yaml:"cron" default:"* * * * *"`
-	On      On     `yaml:"on" requred:"true"`
+	On      On     `yaml:"when" requred:"true"`
 }
 
 func (a *Action) Execute() error {

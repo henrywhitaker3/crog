@@ -35,7 +35,7 @@ actions:
     command: ping -W 1 -c 1 8.8.8.8 # The command to run
     code: 0 # The expected return code
     cron: "* * * * *" # The schedule the command will run on
-    on:
+    when:
       start: https://example.com/ping-google-dns/start # Called before the command is run, optional
       success: https://example.com/ping-google-dns # Called if the action is successful, required
       failure: https://example.com/ping-google-dns/fail # Called if the command doesn't return the desired exit code, optional
