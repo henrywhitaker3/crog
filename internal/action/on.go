@@ -1,4 +1,4 @@
-package check
+package action
 
 type On struct {
 	Start   string `yaml:"start"`

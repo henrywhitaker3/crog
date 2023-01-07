@@ -11,9 +11,9 @@ import (
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List the configured healthchecks",
+	Short: "List the configured actions",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		err := cfg.PrintCheckTable()
+		err := cfg.PrintActionTable()
 
 		return err
 	},

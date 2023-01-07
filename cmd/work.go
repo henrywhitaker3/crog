@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/go-co-op/gocron"
-	"github.com/henrywhitaker3/crog/internal/check"
+	"github.com/henrywhitaker3/crog/internal/action"
 	"github.com/henrywhitaker3/crog/internal/log"
 	"github.com/spf13/cobra"
 )
@@ -25,9 +25,9 @@ var workCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		s := gocron.NewScheduler(time.UTC)
 
-		for _, check := range cfg.Checks {
-			log.Infof("Adding check '%s' to scheduler", check.Name)
-			s.Cron(check.Cron).Do(runCheck, check)
+		for _, action := range cfg.Actions {
+			log.Infof("Adding action '%s' to scheduler", action.Name)
+			s.Cron(action.Cron).Do(runAction, action)
 		}
 
 		log.ForceInfo("Starting schduler")
@@ -48,7 +48,7 @@ func init() {
 	rootCmd.AddCommand(workCmd)
 }
 
-func runCheck(check check.Check) {
-	log.ForceInfof("Running schduled command '%s'", check.Name)
-	check.Execute()
+func runAction(action action.Action) {
+	log.ForceInfof("Running schduled command '%s'", action.Name)
+	action.Execute()
 }

@@ -37,7 +37,7 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	rootCmd.PersistentFlags().StringVarP(&cfgPath, "config", "c", "healthcheck.yaml", "config file (default is healthcheck.yaml)")
+	rootCmd.PersistentFlags().StringVarP(&cfgPath, "config", "c", "crog.yaml", "config file (default is crog.yaml)")
 	rootCmd.PersistentFlags().BoolVarP(&log.Verbose, "verbose", "v", false, "Turn on verbose logging")
 }
 

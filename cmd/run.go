@@ -16,19 +16,19 @@ var runCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		options := []string{}
 
-		for _, check := range cfg.Checks {
-			options = append(options, check.Name)
+		for _, action := range cfg.Actions {
+			options = append(options, action.Name)
 		}
 
 		selectedOption, _ := pterm.DefaultInteractiveSelect.WithOptions(options).Show()
 
-		check, err := cfg.GetCheck(selectedOption)
+		action, err := cfg.GetAction(selectedOption)
 		if err != nil {
 			return err
 		}
-		pterm.Info.Printfln("Running: %s", pterm.Green(check.Name))
+		pterm.Info.Printfln("Running: %s", pterm.Green(action.Name))
 
-		err = check.Execute()
+		err = action.Execute()
 
 		pterm.Error.PrintOnErrorf("%s", err)
 

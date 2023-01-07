@@ -1,4 +1,4 @@
-systemctl stop healthcheck
-systemctl disable healthcheck
-rm /etc/systemd/system/healthcheck.service
+systemctl stop crog
+systemctl disable crog
+rm /etc/systemd/system/crog.service
 systemctl daemon-reload

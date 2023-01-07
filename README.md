@@ -1,4 +1,4 @@
-# Go-Healthcheck
+# Crog
 
 CLI tool to setup scheduled tasks and call URLs based on the result, configured in yaml.
 

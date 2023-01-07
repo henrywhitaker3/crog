@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/henrywhitaker3/crog/internal/check"
+	"github.com/henrywhitaker3/crog/internal/action"
 	"github.com/henrywhitaker3/crog/internal/log"
 	"github.com/henrywhitaker3/crog/internal/validation"
 	"github.com/pterm/pterm"
@@ -12,10 +12,10 @@ import (
 )
 
 type Config struct {
-	Version  string        `yaml:"version" required:"true"`
-	Checks   []check.Check `yaml:"checks"`
-	Verbose  bool          `yaml:"verbose" default:"false"`
-	Timezone string        `yaml:"timezone" default:"UTC"`
+	Version  string          `yaml:"version" required:"true"`
+	Actions  []action.Action `yaml:"actions"`
+	Verbose  bool            `yaml:"verbose" default:"false"`
+	Timezone string          `yaml:"timezone" default:"UTC"`
 }
 
 func LoadConfig(path string) (*Config, error) {
@@ -43,23 +43,23 @@ func LoadConfig(path string) (*Config, error) {
 	return config, nil
 }
 
-func (cfg *Config) GetCheck(name string) (*check.Check, error) {
-	for _, chk := range cfg.Checks {
+func (cfg *Config) GetAction(name string) (*action.Action, error) {
+	for _, chk := range cfg.Actions {
 		if chk.Name == name {
 			return &chk, nil
 		}
 	}
 
-	return nil, fmt.Errorf("could not find check")
+	return nil, fmt.Errorf("could not find action")
 }
 
-func (cfg *Config) PrintCheckTable() error {
+func (cfg *Config) PrintActionTable() error {
 	lines := [][]string{
 		{"Name", "ID", "Command", "Code"},
 	}
 
-	for _, check := range cfg.Checks {
-		lines = append(lines, []string{check.Name, check.Id, check.Command, fmt.Sprintf("%d", check.Code)})
+	for _, action := range cfg.Actions {
+		lines = append(lines, []string{action.Name, action.Id, action.Command, fmt.Sprintf("%d", action.Code)})
 	}
 	return pterm.DefaultTable.WithHasHeader().WithData(lines).Render()
 }
@@ -70,9 +70,9 @@ func (cfg *Config) Validate() error {
 		return err
 	}
 
-	for i, check := range cfg.Checks {
-		if err := check.Validate(); err != nil {
-			return fmt.Errorf("checks[%d]: %s", i, err)
+	for i, action := range cfg.Actions {
+		if err := action.Validate(); err != nil {
+			return fmt.Errorf("actions[%d]: %s", i, err)
 		}
 	}
 

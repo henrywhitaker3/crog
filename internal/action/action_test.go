@@ -1,13 +1,13 @@
-package check_test
+package action_test
 
 import (
 	"testing"
 
-	"github.com/henrywhitaker3/crog/internal/check"
+	"github.com/henrywhitaker3/crog/internal/action"
 )
 
 func TestItReturnsAnErrorIfTheNameIsNotSet(t *testing.T) {
-	check := check.Check{
+	check := action.Action{
 		Id:      "apple",
 		Command: "bongo",
 	}
@@ -18,7 +18,7 @@ func TestItReturnsAnErrorIfTheNameIsNotSet(t *testing.T) {
 }
 
 func TestItReturnsAnErrorIfTheCommandIsNotSet(t *testing.T) {
-	check := check.Check{
+	check := action.Action{
 		Id:   "apple",
 		Name: "bongo",
 	}
@@ -29,7 +29,7 @@ func TestItReturnsAnErrorIfTheCommandIsNotSet(t *testing.T) {
 }
 
 func TestItReturnsAnErrorIfTheIdIsNotSet(t *testing.T) {
-	check := check.Check{
+	check := action.Action{
 		Command: "apple",
 		Name:    "bongo",
 	}
@@ -40,7 +40,7 @@ func TestItReturnsAnErrorIfTheIdIsNotSet(t *testing.T) {
 }
 
 func TestItSetsTheDefaultValueForCron(t *testing.T) {
-	check := check.Check{
+	check := action.Action{
 		Command: "apple",
 		Name:    "bongo",
 		Id:      "bingo",
@@ -56,7 +56,7 @@ func TestItSetsTheDefaultValueForCron(t *testing.T) {
 }
 
 func TestItSetsTheDefaultValueForCode(t *testing.T) {
-	check := check.Check{
+	check := action.Action{
 		Command: "apple",
 		Name:    "bongo",
 		Id:      "bingo",
