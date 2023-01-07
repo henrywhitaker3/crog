@@ -9,6 +9,7 @@ import (
 func TestItReturnsAnErrorIfTheNameIsNotSet(t *testing.T) {
 	check := action.Action{
 		Command: "bongo",
+		On:      action.On{Success: "apples"},
 	}
 
 	if err := check.Validate(); err == nil {
@@ -19,6 +20,7 @@ func TestItReturnsAnErrorIfTheNameIsNotSet(t *testing.T) {
 func TestItReturnsAnErrorIfTheCommandIsNotSet(t *testing.T) {
 	check := action.Action{
 		Name: "bongo",
+		On:   action.On{Success: "apples"},
 	}
 
 	if err := check.Validate(); err == nil {
@@ -30,6 +32,7 @@ func TestItSetsTheDefaultValueForCron(t *testing.T) {
 	check := action.Action{
 		Command: "apple",
 		Name:    "bongo",
+		On:      action.On{Success: "apples"},
 	}
 
 	if err := check.Validate(); err != nil {
@@ -45,6 +48,7 @@ func TestItSetsTheDefaultValueForCode(t *testing.T) {
 	check := action.Action{
 		Command: "apple",
 		Name:    "bongo",
+		On:      action.On{Success: "apples"},
 	}
 
 	if err := check.Validate(); err != nil {
