@@ -48,7 +48,7 @@ func initConfig() {
 		fmt.Printf("Configuration error: %s\n", err)
 		os.Exit(1)
 	}
-	if *cfg.Verbose {
+	if cfg.Verbose {
 		log.Verbose = true
 	}
 }

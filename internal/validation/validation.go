@@ -19,11 +19,18 @@ func Validate(item any) error {
 			continue
 		}
 
-		if hasDefault(field) {
-			fmt.Printf("field %s has default %s\n", field.Name(), getDefault(field))
+		if hasDefault(field) && !isSet(field) {
 			switch field.Kind().String() {
 			case "int":
 				val, err := strconv.Atoi(getDefault(field))
+				if err != nil {
+					return err
+				}
+				if err := reflections.SetField(item, field.Name(), val); err != nil {
+					return err
+				}
+			case "bool":
+				val, err := strconv.ParseBool(getDefault(field))
 				if err != nil {
 					return err
 				}
@@ -46,7 +53,6 @@ func isRequired(field *structs.Field) bool {
 }
 
 func isSet(field *structs.Field) bool {
-	fmt.Printf("field: '%s', value: '%s'\n", field.Name(), field.Value())
 	return !field.IsZero()
 }
 

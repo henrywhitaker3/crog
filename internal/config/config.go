@@ -4,21 +4,19 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/fatih/structs"
 	"github.com/henrywhitaker3/go-healthcheck/internal/check"
 	"github.com/henrywhitaker3/go-healthcheck/internal/log"
+	"github.com/henrywhitaker3/go-healthcheck/internal/validation"
 	"github.com/pterm/pterm"
 	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
-	Version  string        `yaml:"version"`
+	Version  string        `yaml:"version" required:"true"`
 	Checks   []check.Check `yaml:"checks"`
-	Verbose  *bool         `yaml:"verbose"`
-	Timezone string        `yaml:"timezone"`
+	Verbose  bool          `yaml:"verbose" default:"false"`
+	Timezone string        `yaml:"timezone" default:"UTC"`
 }
-
-// TODO: unmarshall to set defaults e.g. utc timezone
 
 func LoadConfig(path string) (*Config, error) {
 	log.Infof("Loading config file from %s", path)
@@ -34,14 +32,16 @@ func LoadConfig(path string) (*Config, error) {
 		return nil, err
 	}
 
-	if config.Verbose == nil {
-		v := false
-		config.Verbose = &v
-	}
+	fmt.Println(config)
 
-	if structs.HasZero(config) {
-		return nil, fmt.Errorf("invalid configuration file")
+	if err := config.Validate(); err != nil {
+		return nil, err
 	}
+	fmt.Println(config)
+
+	// if structs.HasZero(config) {
+	// 	return nil, fmt.Errorf("invalid configuration file")
+	// }
 
 	return config, nil
 }
@@ -67,4 +67,11 @@ func (cfg *Config) PrintCheckTable() error {
 	return pterm.DefaultTable.WithHasHeader().WithData(lines).Render()
 }
 
-// TODO: unmarshal function for check
+func (cfg *Config) Validate() error {
+	err := validation.Validate(cfg)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
