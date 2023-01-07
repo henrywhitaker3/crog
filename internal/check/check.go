@@ -50,6 +50,8 @@ func (c *Check) runCommand() (int, string) {
 	args, _ := shlex.Split(c.Command)
 	bin := args[0]
 	args = args[1:]
+	c.LogInfo(fmt.Sprintf("executable: %s", bin))
+	c.LogInfo(fmt.Sprintf("args: %v", args))
 
 	cmd := exec.Command(bin, args...)
 	out, err := cmd.Output()
