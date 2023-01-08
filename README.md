@@ -27,19 +27,30 @@ The config is defined in yaml, and the systemd service looks at `/etc/crog/crog.
 
 ```yaml
 version: 1
-verbose: true # enables verbose log output
-timezone: UTC
 
 actions:
-  - name: Ping google dns # The name of the check
-    command: ping -W 1 -c 1 8.8.8.8 # The command to run
-    code: 0 # The expected return code
-    cron: "* * * * *" # The schedule the command will run on
+  - name: Ping google dns
+    command: ping -W 1 -c 1 8.8.8.8
     when:
-      start: https://example.com/ping-google-dns/start # Called before the command is run, optional
-      success: https://example.com/ping-google-dns # Called if the action is successful, required
-      failure: https://example.com/ping-google-dns/fail # Called if the command doesn't return the desired exit code, optional
+      success: https://example.com/ping-google-dns
 ```
+
+### Values
+
+| Field | Description | Type | Default | Required |
+| --- | --- | --- | --- | --- |
+| version | The config format version | int |  | yes |
+| timezone | The timezone the cron scheduler uses | string | UTC | no |
+| verbose | Whether to turn on verbose logging | bool | false | no |
+| actions | An array of actions to run | [] | | yes |
+| actions.*.name | The name of the action | string | | yes |
+| actions.*.command | The command to run | string | | yes |
+| actions.*.code | The desired exit code returned by the command | int | 0 | no |
+| actions.*.cron | The schedule that the action will be run on | string | * * * * * | no |
+| actions.*.cron.when | An object conatining the URLs to call after the actions are run | {} | | yes |
+| actions.*.cron.when.start | The URL to call before the action gets run | string | | no |
+| actions.*.cron.when.success | The URL to call when the action is successful | string | | yes |
+| actions.*.cron.when.failure | The URL to call when the action fails | string | | no |
 
 ## Usage
 
