@@ -19,6 +19,7 @@ type Config struct {
 }
 
 func LoadConfig(path string) (*Config, error) {
+	// TODO: periodically check the config for changes
 	log.Infof("Loading config file from %s", path)
 	data, err := os.ReadFile(path)
 	if err != nil {
