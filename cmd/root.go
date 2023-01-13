@@ -16,7 +16,7 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:     "crog",
-	Version: "0.1.10",
+	Version: "0.1.11",
 	Short:   "A CLI tool to setup scheduled tasks and call URLs based on the result, configured in yaml.",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
