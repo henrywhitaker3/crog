@@ -6,16 +6,18 @@ import (
 
 	"github.com/henrywhitaker3/crog/internal/action"
 	"github.com/henrywhitaker3/crog/internal/log"
+	"github.com/henrywhitaker3/crog/internal/server"
 	"github.com/henrywhitaker3/crog/internal/validation"
 	"github.com/pterm/pterm"
 	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
-	Version  string          `yaml:"version" required:"true"`
-	Actions  []action.Action `yaml:"actions"`
-	Verbose  bool            `yaml:"verbose" default:"false"`
-	Timezone string          `yaml:"timezone" default:"UTC"`
+	Version  string              `yaml:"version" required:"true"`
+	Actions  []action.Action     `yaml:"actions"`
+	Verbose  bool                `yaml:"verbose" default:"false"`
+	Timezone string              `yaml:"timezone" default:"UTC"`
+	Server   server.ServerConfig `yaml:"server"`
 }
 
 func LoadConfig(path string) (*Config, error) {
@@ -75,6 +77,10 @@ func (cfg *Config) Validate() error {
 		if err := action.Validate(); err != nil {
 			return fmt.Errorf("actions[%d]: %s", i, err)
 		}
+	}
+
+	if err := cfg.Server.Validate(); err != nil {
+		return err
 	}
 
 	return nil

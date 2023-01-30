@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option go_package = "internal/pb";
+
+message ListActionsRequest {
+
+}
+
+message Action {
+    string name = 1;
+    string command = 2;
+    string code = 3;
+}
+
+message ListActionsResponse {
+    repeated Action actions = 1;
+}
+
+message RunActionRequest {
+    string action = 1;
+}
+
+message RunActionResponse {
+    string action = 1;
+    string command = 2;
+    string stdout = 3;
+    int64 code = 4;
+}
+
+service Crog {
+    rpc List (ListActionsRequest) returns (ListActionsResponse);
+    rpc Run (RunActionRequest) returns (RunActionResponse);
+}
