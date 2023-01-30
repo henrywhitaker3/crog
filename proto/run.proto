@@ -10,6 +10,14 @@ message Action {
     string name = 1;
     string command = 2;
     int64 code = 3;
+    string cron = 4;
+    ActionWhen when = 5;
+}
+
+message ActionWhen {
+    string start = 1;
+    string success = 2;
+    string failure = 3;
 }
 
 message ListActionsResponse {
@@ -21,8 +29,8 @@ message RunActionRequest {
 }
 
 message RunActionResponse {
-    string action = 1;
-    string command = 2;
+    Action action = 1;
+    bool success = 2;
     string stdout = 3;
     int64 code = 4;
 }

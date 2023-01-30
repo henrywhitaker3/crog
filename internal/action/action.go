@@ -20,9 +20,10 @@ type Action struct {
 }
 
 type Result struct {
-	Action *Action
-	Code   int
-	Stdout string
+	Action  *Action
+	Success bool
+	Code    int
+	Stdout  string
 }
 
 var client *http.Client
@@ -37,17 +38,25 @@ func (a *Action) Execute() (*Result, error) {
 
 	code, out := a.runCommand()
 
+	res := &Result{
+		Action: a,
+		Code:   code,
+		Stdout: out,
+	}
+
 	if code != a.Code {
 		a.LogError(fmt.Sprintf("Check failed - expected status %d, got %d", a.Code, code))
 		a.fail()
-		return nil, fmt.Errorf("check failed - expected status %d, got %d", a.Code, code)
+		res.Success = false
+		return res, fmt.Errorf("check failed - expected status %d, got %d", a.Code, code)
 	}
 
 	a.LogInfo("Check passed")
 
+	res.Success = true
 	a.success()
 
-	return &Result{Action: a, Code: code, Stdout: out}, nil
+	return res, nil
 }
 
 func (a *Action) LogInfo(value string) {

@@ -6,6 +6,7 @@ package cmd
 
 import (
 	"github.com/henrywhitaker3/crog/internal/client"
+	"github.com/henrywhitaker3/crog/internal/log"
 	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
 )
@@ -57,9 +58,13 @@ var remoteCmd = &cobra.Command{
 			pterm.Error.PrintOnErrorf("%s", err)
 			return
 		}
-		pterm.Info.Printfln("Command: %s", res.Command)
-		pterm.Info.Printfln("Code: %d", res.Code)
-		pterm.Info.Printfln("Stdout:\n%s", res.Stdout)
+		pterm.Info.Printfln("Success: %v", pterm.Green(res.Success))
+
+		if log.Verbose {
+			pterm.Info.Printfln("Command: %s", res.Action.Command)
+			pterm.Info.Printfln("Code: %d", res.Code)
+			pterm.Info.Printfln("Stdout:\n%s", res.Stdout)
+		}
 	},
 }
 
