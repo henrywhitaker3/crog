@@ -52,7 +52,7 @@ func (c *Client) GetActions() ([]string, error) {
 
 func (c *Client) RunAction(name string) (*pb.RunActionResponse, error) {
 	ctx := context.Background()
-	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
+	ctx, cancel := context.WithTimeout(ctx, time.Second*120)
 	defer cancel()
 
 	return c.client.Run(ctx, &pb.RunActionRequest{Action: name})
