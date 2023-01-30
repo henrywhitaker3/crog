@@ -17,6 +17,7 @@ type Config struct {
 	Verbose  bool            `yaml:"verbose" default:"false"`
 	Timezone string          `yaml:"timezone" default:"UTC"`
 	Server   ServerConfig    `yaml:"server"`
+	Remotes  []Remote        `yaml:"remotes"`
 }
 
 type ServerConfig struct {
@@ -26,6 +27,11 @@ type ServerConfig struct {
 
 func (sc *ServerConfig) Validate() error {
 	return validation.Validate(sc)
+}
+
+type Remote struct {
+	Name string `yaml:"name" required:"true"`
+	Url  string `yaml:"url" required:"true"`
 }
 
 func LoadConfig(path string) (*Config, error) {
@@ -84,6 +90,12 @@ func (cfg *Config) Validate() error {
 	for i, action := range cfg.Actions {
 		if err := action.Validate(); err != nil {
 			return fmt.Errorf("actions[%d]: %s", i, err)
+		}
+	}
+
+	for i, remote := range cfg.Remotes {
+		if err := validation.Validate(remote); err != nil {
+			return fmt.Errorf("remotes[%d]: %s", i, err)
 		}
 	}
 
