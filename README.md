@@ -52,8 +52,8 @@ actions:
 | actions.*.cron.when.success | The URL to call when the action is successful | string | | yes |
 | actions.*.cron.when.failure | The URL to call when the action fails | string | | no |
 | remotes | An array of remote crog servers | [] | | no |
-| remotes.*.name | The name of the remote crog server | string | yes |
-| remotes.*.url | The url of the remote crog server | string | yes |
+| remotes.*.name | The name of the remote crog server | string | | yes |
+| remotes.*.url | The url of the remote crog server | string | | yes |
 
 ## Usage
 
