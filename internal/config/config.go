@@ -21,7 +21,7 @@ type Config struct {
 }
 
 type ServerConfig struct {
-	Enabled bool   `yaml:"enabled" default:"true"`
+	Enabled bool   `yaml:"enabled" default:"false"`
 	Listen  string `yaml:"listen" default:":9399"`
 }
 

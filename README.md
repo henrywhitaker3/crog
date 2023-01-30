@@ -51,7 +51,32 @@ actions:
 | actions.*.cron.when.start | The URL to call before the action gets run | string | | no |
 | actions.*.cron.when.success | The URL to call when the action is successful | string | | yes |
 | actions.*.cron.when.failure | The URL to call when the action fails | string | | no |
+| remotes | An array of remote crog servers | [] | | no |
+| remotes.*.name | The name of the remote crog server | string | yes |
+| remotes.*.url | The url of the remote crog server | string | yes |
 
 ## Usage
 
 The system service will run `work` as root, which will run the checks on a schedule. You can also run a check as a one-off by running `crog run` and choosing the check from the menu.
+
+### Remote server
+
+The crog service will also run a grpc server, which allows you to run crog actions on remote servers. By default, this is turned off. To enable the remote server, add the following to your crog config on the server:
+
+```yaml
+...
+server:
+    enabled: true
+    listen: :9399 # You can chose any port here. Add an IP before the colon to only listen on a specific IP address
+```
+
+To run commands on remote servers, install crog where you want to run commands from and add these remote servers to your config file:
+
+```yaml
+...
+remotes:
+    - name: Example server
+      url: 10.10.10.10:9399
+```
+
+Be careful when not setting `server.listen` to a specific IP, as there is currently no authentication and anyone could run these commands if your server has a public IP.
