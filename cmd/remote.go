@@ -58,7 +58,7 @@ var remoteCmd = &cobra.Command{
 			return
 		}
 		pterm.Info.Printfln("Command: %s", res.Command)
-		pterm.Info.Printfln("Code: %s", res.Code)
+		pterm.Info.Printfln("Code: %d", res.Code)
 		pterm.Info.Printfln("Stdout:\n%s", res.Stdout)
 	},
 }
