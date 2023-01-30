@@ -40,8 +40,8 @@ var workCmd = &cobra.Command{
 			if err != nil {
 				return err
 			}
-			gs.Listen()
-			// Defer closing until the end, reduces multiple ifs
+			go gs.Listen()
+
 			defer gs.Close()
 			defer log.ForceInfo("Stopping grpc server")
 		}
