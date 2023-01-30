@@ -5,6 +5,7 @@ Copyright © 2023 Henry Whitaker <henrywhitaker3@outlook.com>
 package cmd
 
 import (
+	"github.com/henrywhitaker3/crog/internal/cli"
 	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
 )
@@ -13,26 +14,18 @@ import (
 var runCmd = &cobra.Command{
 	Use:   "run",
 	Short: "Run a check",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		options := []string{}
-
-		for _, action := range cfg.Actions {
-			options = append(options, action.Name)
-		}
-
-		selectedOption, _ := pterm.DefaultInteractiveSelect.WithOptions(options).Show()
+	Run: func(cmd *cobra.Command, args []string) {
+		selectedOption, _ := cli.SingleChoice(cli.GetActionNames(cfg.Actions))
 
 		action, err := cfg.GetAction(selectedOption)
 		if err != nil {
-			return err
+			cli.ErrorExit(err)
 		}
-		pterm.Info.Printfln("Running: %s", pterm.Green(action.Name))
+		cli.Printfln("Running: %s", pterm.Green(action.Name))
 
-		_, err = action.Execute()
-
-		pterm.Error.PrintOnErrorf("%s", err)
-
-		return nil
+		if _, err = action.Execute(); err != nil {
+			cli.ErrorExit(err)
+		}
 	},
 }
 

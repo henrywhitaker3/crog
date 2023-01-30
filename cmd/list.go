@@ -5,6 +5,7 @@ Copyright © 2023 Henry Whitaker <henrywhitaker3@outlook.com>
 package cmd
 
 import (
+	"github.com/henrywhitaker3/crog/internal/cli"
 	"github.com/spf13/cobra"
 )
 
@@ -13,7 +14,7 @@ var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List the configured actions",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		err := cfg.PrintActionTable()
+		err := cli.PrintActionTable(cfg.Actions)
 
 		return err
 	},

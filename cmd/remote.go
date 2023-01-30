@@ -5,6 +5,9 @@ Copyright © 2023 Henry Whitaker <henrywhitaker3@outlook.com>
 package cmd
 
 import (
+	"errors"
+
+	"github.com/henrywhitaker3/crog/internal/cli"
 	"github.com/henrywhitaker3/crog/internal/client"
 	"github.com/henrywhitaker3/crog/internal/log"
 	"github.com/pterm/pterm"
@@ -17,53 +20,42 @@ var remoteCmd = &cobra.Command{
 	Short: "Run crog actions on a remote server",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(cfg.Remotes) == 0 {
-			pterm.Error.Println("No remotes configured")
-			return
+			cli.ErrorExit(errors.New("no remotes configured"))
 		}
 
-		remotes := []string{}
-
-		for _, remote := range cfg.Remotes {
-			remotes = append(remotes, remote.Name)
-		}
-
-		selectedRemote, _ := pterm.DefaultInteractiveSelect.WithOptions(remotes).Show()
+		selectedRemote, _ := cli.SingleChoice(cli.GetRemoteNames(cfg.Remotes))
 
 		remote, err := cfg.GetRemote(selectedRemote)
 		if err != nil {
-			pterm.Error.PrintOnErrorf("%s", err)
-			return
+			cli.ErrorExit(err)
 		}
-		pterm.Info.Printfln("Listing actions on %s", pterm.Green(remote.Name))
+		cli.Printfln("Listing actions on %s", pterm.Green(remote.Name))
 
 		cl, err := client.New(remote.Url)
 		if err != nil {
-			pterm.Error.PrintOnErrorf("%s", err)
-			return
+			cli.ErrorExit(err)
 		}
 		defer cl.Close()
 
 		resp, err := cl.GetActions()
 		if err != nil {
-			pterm.Error.PrintOnErrorf("%s", err)
-			return
+			cli.ErrorExit(err)
 		}
 
 		selectedAction, _ := pterm.DefaultInteractiveSelect.WithOptions(resp).Show()
 
-		pterm.Info.Printfln("Running '%s' action on remote", selectedAction)
+		cli.Printfln("Running '%s' action on remote", selectedAction)
 
 		res, err := cl.RunAction(selectedAction)
 		if err != nil {
-			pterm.Error.PrintOnErrorf("%s", err)
-			return
+			cli.ErrorExit(err)
 		}
-		pterm.Info.Printfln("Success: %v", pterm.Green(res.Success))
+		cli.Printfln("Success: %v", pterm.Green(res.Success))
 
 		if log.Verbose {
-			pterm.Info.Printfln("Command: %s", res.Action.Command)
-			pterm.Info.Printfln("Code: %d", res.Code)
-			pterm.Info.Printfln("Stdout:\n%s", res.Stdout)
+			cli.Printfln("Command: %s", res.Action.Command)
+			cli.Printfln("Code: %d", res.Code)
+			cli.Printfln("Stdout:\n%s", res.Stdout)
 		}
 	},
 }

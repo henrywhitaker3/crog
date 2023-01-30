@@ -7,7 +7,6 @@ import (
 	"github.com/henrywhitaker3/crog/internal/action"
 	"github.com/henrywhitaker3/crog/internal/log"
 	"github.com/henrywhitaker3/crog/internal/validation"
-	"github.com/pterm/pterm"
 	"gopkg.in/yaml.v3"
 )
 
@@ -78,17 +77,6 @@ func (cfg *Config) GetRemote(name string) (*Remote, error) {
 	}
 
 	return nil, fmt.Errorf("could not find remote")
-}
-
-func (cfg *Config) PrintActionTable() error {
-	lines := [][]string{
-		{"Name", "Command", "Code", "Cron"},
-	}
-
-	for _, action := range cfg.Actions {
-		lines = append(lines, []string{action.Name, action.Command, fmt.Sprintf("%d", action.Code), action.Cron})
-	}
-	return pterm.DefaultTable.WithHasHeader().WithData(lines).Render()
 }
 
 func (cfg *Config) Validate() error {
