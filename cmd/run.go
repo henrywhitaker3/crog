@@ -28,7 +28,7 @@ var runCmd = &cobra.Command{
 		}
 		pterm.Info.Printfln("Running: %s", pterm.Green(action.Name))
 
-		err = action.Execute()
+		_, err = action.Execute()
 
 		pterm.Error.PrintOnErrorf("%s", err)
 

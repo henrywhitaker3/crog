@@ -19,29 +19,35 @@ type Action struct {
 	On      On     `yaml:"when" requred:"true"`
 }
 
+type Result struct {
+	Action *Action
+	Code   int
+	Stdout string
+}
+
 var client *http.Client
 
 func init() {
 	client = &http.Client{}
 }
 
-func (a *Action) Execute() error {
+func (a *Action) Execute() (*Result, error) {
 	a.LogInfo("Executing check")
 	a.start()
 
-	code, _ := a.runCommand()
+	code, out := a.runCommand()
 
 	if code != a.Code {
 		a.LogError(fmt.Sprintf("Check failed - expected status %d, got %d", a.Code, code))
 		a.fail()
-		return fmt.Errorf("check failed - expected status %d, got %d", a.Code, code)
+		return nil, fmt.Errorf("check failed - expected status %d, got %d", a.Code, code)
 	}
 
 	a.LogInfo("Check passed")
 
 	a.success()
 
-	return nil
+	return &Result{Action: a, Code: code, Stdout: out}, nil
 }
 
 func (a *Action) LogInfo(value string) {
