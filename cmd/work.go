@@ -13,6 +13,7 @@ import (
 	"github.com/go-co-op/gocron"
 	"github.com/henrywhitaker3/crog/internal/action"
 	"github.com/henrywhitaker3/crog/internal/log"
+	"github.com/henrywhitaker3/crog/internal/server"
 	"github.com/spf13/cobra"
 )
 
@@ -22,7 +23,7 @@ var workCmd = &cobra.Command{
 	Long: `Run the program as a daemon.
 
 	For each check where a cron value is specified, the daemon will run them when accordingly.`,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		s := gocron.NewScheduler(time.UTC)
 
 		for _, action := range cfg.Actions {
@@ -33,6 +34,18 @@ var workCmd = &cobra.Command{
 		log.ForceInfo("Starting schduler")
 		s.StartAsync()
 
+		if cfg.Server.Enabled {
+			log.ForceInfo("Starting grpc server")
+			gs, err := server.New(cfg)
+			if err != nil {
+				return err
+			}
+			gs.Listen()
+			// Defer closing until the end, reduces multiple ifs
+			defer gs.Close()
+			defer log.ForceInfo("Stopping grpc server")
+		}
+
 		log.Info("Registering signal handlers for graceful shutdown")
 
 		sig := make(chan os.Signal, 1)
@@ -41,6 +54,8 @@ var workCmd = &cobra.Command{
 
 		log.ForceInfo("Stopping scheduler")
 		s.Stop()
+
+		return nil
 	},
 }
 
