@@ -5,8 +5,8 @@ Copyright © 2023 Henry Whitaker <henrywhitaker3@outlook.com>
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/henrywhitaker3/crog/internal/client"
+	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
 )
 
@@ -14,9 +14,52 @@ import (
 var remoteCmd = &cobra.Command{
 	Use:   "remote",
 	Short: "Run crog actions on a remote server",
-	Long:  `Run crog actions on a remote crog instance`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("remote called")
+		if len(cfg.Remotes) == 0 {
+			pterm.Error.Println("No remotes configured")
+			return
+		}
+
+		remotes := []string{}
+
+		for _, remote := range cfg.Remotes {
+			remotes = append(remotes, remote.Name)
+		}
+
+		selectedRemote, _ := pterm.DefaultInteractiveSelect.WithOptions(remotes).Show()
+
+		remote, err := cfg.GetRemote(selectedRemote)
+		if err != nil {
+			pterm.Error.PrintOnErrorf("%s", err)
+			return
+		}
+		pterm.Info.Printfln("Listing actions on %s", pterm.Green(remote.Name))
+
+		cl, err := client.New(remote.Url)
+		if err != nil {
+			pterm.Error.PrintOnErrorf("%s", err)
+			return
+		}
+		defer cl.Close()
+
+		resp, err := cl.GetActions()
+		if err != nil {
+			pterm.Error.PrintOnErrorf("%s", err)
+			return
+		}
+
+		selectedAction, _ := pterm.DefaultInteractiveSelect.WithOptions(resp).Show()
+
+		pterm.Info.Printfln("Running '%s' action on remote", selectedAction)
+
+		res, err := cl.RunAction(selectedAction)
+		if err != nil {
+			pterm.Error.PrintOnErrorf("%s", err)
+			return
+		}
+		pterm.Info.Printfln("Command: %s", res.Command)
+		pterm.Info.Printfln("Code: %s", res.Code)
+		pterm.Info.Printfln("Stdout:\n%s", res.Stdout)
 	},
 }
 

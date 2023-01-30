@@ -70,6 +70,16 @@ func (cfg *Config) GetAction(name string) (*action.Action, error) {
 	return nil, fmt.Errorf("could not find action")
 }
 
+func (cfg *Config) GetRemote(name string) (*Remote, error) {
+	for _, chk := range cfg.Remotes {
+		if chk.Name == name {
+			return &chk, nil
+		}
+	}
+
+	return nil, fmt.Errorf("could not find remote")
+}
+
 func (cfg *Config) PrintActionTable() error {
 	lines := [][]string{
 		{"Name", "Command", "Code", "Cron"},

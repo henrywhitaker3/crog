@@ -3,3 +3,7 @@ version: 1
 timezone: UTC
 
 actions: []
+
+server:
+  enabled: true
+  listen: 127.0.0.1:9399
