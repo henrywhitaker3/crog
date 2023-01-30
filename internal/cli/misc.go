@@ -19,6 +19,17 @@ func PrintActionTable(actions []action.Action) error {
 	return pterm.DefaultTable.WithHasHeader().WithData(lines).Render()
 }
 
+func PrintRemoteTable(remotes []config.Remote) error {
+	lines := [][]string{
+		{"Name", "URL"},
+	}
+
+	for _, remote := range remotes {
+		lines = append(lines, []string{remote.Name, remote.Url})
+	}
+	return pterm.DefaultTable.WithHasHeader().WithData(lines).Render()
+}
+
 func GetActionNames(actions []action.Action) []string {
 	names := []string{}
 

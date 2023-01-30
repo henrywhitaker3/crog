@@ -16,6 +16,7 @@ func NewRootCmd(cfg *config.Config) *cobra.Command {
 
 	cmd.AddCommand(
 		NewRunCmd(cfg),
+		NewListCmd(cfg),
 	)
 
 	return cmd
