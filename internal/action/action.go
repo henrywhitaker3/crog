@@ -16,7 +16,7 @@ type Action struct {
 	Command string `yaml:"command" required:"true"`
 	Code    int    `yaml:"code" default:"0"`
 	Cron    string `yaml:"cron" default:"* * * * *"`
-	On      On     `yaml:"when" requred:"true"`
+	On      On     `yaml:"when"`
 }
 
 type Result struct {
@@ -100,8 +100,11 @@ func (a *Action) start() error {
 }
 
 func (a *Action) success() error {
-	a.LogInfo("Sending success request for check")
+	if a.On.Success == "" {
+		return nil
+	}
 
+	a.LogInfo("Sending success request for check")
 	return a.request(a.On.Success)
 }
 

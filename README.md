@@ -47,10 +47,10 @@ actions:
 | actions.*.command | The command to run | string | | yes |
 | actions.*.code | The desired exit code returned by the command | int | 0 | no |
 | actions.*.cron | The schedule that the action will be run on | string | * * * * * | no |
-| actions.*.cron.when | An object conatining the URLs to call after the actions are run | {} | | yes |
-| actions.*.cron.when.start | The URL to call before the action gets run | string | | no |
-| actions.*.cron.when.success | The URL to call when the action is successful | string | | yes |
-| actions.*.cron.when.failure | The URL to call when the action fails | string | | no |
+| actions.*.when | An object conatining the URLs to call after the actions are run | {} | | no |
+| actions.*.when.start | The URL to call before the action gets run | string | | no |
+| actions.*.when.success | The URL to call when the action is successful | string | | no |
+| actions.*.when.failure | The URL to call when the action fails | string | | no |
 | remotes | An array of remote crog servers | [] | | no |
 | remotes.*.name | The name of the remote crog server | string | | yes |
 | remotes.*.url | The url of the remote crog server | string | | yes |
