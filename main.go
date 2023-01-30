@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	cfgPath := flag.StringP("config", "c", "crog.yaml", "config file (default is crog.yaml)")
+	cfgPath := flag.StringP("config", "c", "crog.yaml", "config file")
 
 	cfg, err := config.LoadConfig(*cfgPath)
 	if err != nil {
