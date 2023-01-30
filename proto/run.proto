@@ -9,7 +9,7 @@ message ListActionsRequest {
 message Action {
     string name = 1;
     string command = 2;
-    string code = 3;
+    int64 code = 3;
 }
 
 message ListActionsResponse {
