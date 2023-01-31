@@ -6,10 +6,10 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/go-co-op/gocron"
-	"github.com/henrywhitaker3/crog/internal/action"
 	"github.com/henrywhitaker3/crog/internal/config"
+	"github.com/henrywhitaker3/crog/internal/domain"
 	"github.com/henrywhitaker3/crog/internal/log"
+	"github.com/henrywhitaker3/crog/internal/scheduler"
 	"github.com/henrywhitaker3/crog/internal/server"
 	"github.com/spf13/cobra"
 )
@@ -22,26 +22,15 @@ func NewWorkCmd(cfg *config.Config) *cobra.Command {
 
 	For each check where a cron value is specified, the daemon will run them when accordingly.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			s := gocron.NewScheduler(time.UTC)
-
-			for _, action := range cfg.Actions {
-				log.Infof("Adding action '%s' to scheduler", action.Name)
-				s.Cron(action.Cron).Do(runAction, action)
+			workers, err := getWorkers(cfg)
+			if err != nil {
+				return err
 			}
 
-			log.ForceInfo("Starting schduler")
-			s.StartAsync()
-
-			if cfg.Server.Enabled {
-				log.ForceInfo("Starting grpc server")
-				gs, err := server.New(cfg)
-				if err != nil {
+			for _, worker := range workers {
+				if err := worker.Start(); err != nil {
 					return err
 				}
-				go gs.Listen()
-
-				defer gs.Close()
-				defer log.ForceInfo("Stopping grpc server")
 			}
 
 			log.Info("Registering signal handlers for graceful shutdown")
@@ -50,15 +39,29 @@ func NewWorkCmd(cfg *config.Config) *cobra.Command {
 			signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
 			<-sig
 
-			log.ForceInfo("Stopping scheduler")
-			s.Stop()
+			for _, worker := range workers {
+				if err := worker.Stop(); err != nil {
+					return err
+				}
+			}
 
 			return nil
 		},
 	}
 }
 
-func runAction(action action.Action) {
-	log.ForceInfof("Running schduled command '%s'", action.Name)
-	action.Execute()
+func getWorkers(cfg *config.Config) ([]domain.Worker, error) {
+	workers := []domain.Worker{}
+
+	if cfg.Server.Enabled {
+		serv, err := server.New(cfg)
+		if err != nil {
+			return workers, err
+		}
+		workers = append(workers, serv)
+	}
+
+	workers = append(workers, scheduler.New(time.UTC, cfg.Actions))
+
+	return workers, nil
 }

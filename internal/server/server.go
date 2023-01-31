@@ -4,6 +4,7 @@ import (
 	"net"
 
 	"github.com/henrywhitaker3/crog/internal/config"
+	"github.com/henrywhitaker3/crog/internal/log"
 	"github.com/henrywhitaker3/crog/internal/pb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -31,22 +32,27 @@ func New(cfg *config.Config) (*Server, error) {
 	return &serv, nil
 }
 
-func (s *Server) Listen() error {
+func (s *Server) Start() error {
+	log.ForceInfof("Starting grpc server on %s", s.cfg.Server.Listen)
 	lis, err := net.Listen("tcp", s.cfg.Server.Listen)
 	if err != nil {
 		return err
 	}
 	s.listener = &lis
 
-	if err := s.grpcServer.Serve(*s.listener); err != nil {
-		return err
-	}
+	go func() error {
+		if err := s.grpcServer.Serve(*s.listener); err != nil {
+			return err
+		}
+		return nil
+	}()
 
 	return nil
 }
 
-func (s *Server) Close() {
+func (s *Server) Stop() error {
+	log.ForceInfo("Stopping grpc server")
 	s.grpcServer.GracefulStop()
 	lis := *s.listener
-	lis.Close()
+	return lis.Close()
 }
