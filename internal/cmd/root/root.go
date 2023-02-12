@@ -13,7 +13,7 @@ import (
 func NewRootCmd(cfg *config.Config) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "crog",
-		Version: "0.2.5",
+		Version: "0.2.6",
 		Short:   "A CLI tool to setup scheduled tasks and call URLs based on the result, configured in yaml.",
 		// Uncomment the following line if your bare application
 		// has an action associated with it:
