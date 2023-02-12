@@ -30,7 +30,7 @@ message RunActionRequest {
 
 message RunActionResponse {
     Action action = 1;
-    bool success = 2;
+    string err = 2;
     string stdout = 3;
     int64 code = 4;
 }

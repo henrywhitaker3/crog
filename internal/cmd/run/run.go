@@ -3,6 +3,7 @@ package run
 import (
 	"github.com/henrywhitaker3/crog/internal/cli"
 	"github.com/henrywhitaker3/crog/internal/config"
+	"github.com/henrywhitaker3/crog/internal/log"
 	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
 )
@@ -20,8 +21,13 @@ func NewRunCmd(cfg *config.Config) *cobra.Command {
 			}
 			cli.Printfln("Running: %s", pterm.Green(action.Name))
 
-			if _, err = action.Execute(); err != nil {
-				cli.ErrorExit(err)
+			log.ActionPreflight(action)
+			res := action.Execute()
+			if log.Verbose {
+				log.LogResult(res)
+			}
+			if res.Err != nil {
+				cli.ErrorExit(res.Err)
 			}
 		},
 	}

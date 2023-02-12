@@ -23,18 +23,22 @@ func (s Server) Run(ctx context.Context, req *pb.RunActionRequest) (*pb.RunActio
 	if err != nil {
 		return nil, err
 	}
-	log.ForceInfof("Running grpc command '%s'", action.Name)
+	log.ForceInfof(log.ActionLogFormat(action, "Running grpc handler"))
 
-	res, err := action.Execute()
-	if err != nil {
-		return nil, err
+	log.ActionPreflight(action)
+	res := action.Execute()
+	log.LogResult(res)
+
+	errS := ""
+	if res.Err != nil {
+		errS = res.Err.Error()
 	}
 
 	return &pb.RunActionResponse{
-		Action:  actionToPbAction(action),
-		Success: res.Success,
-		Stdout:  res.Stdout,
-		Code:    int64(res.Code),
+		Action: actionToPbAction(action),
+		Err:    errS,
+		Stdout: res.Stdout,
+		Code:   int64(res.Code),
 	}, nil
 }
 

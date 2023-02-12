@@ -79,11 +79,11 @@ func runInteractive(cfg *config.Config) error {
 }
 
 func handleActionResponse(res *pb.RunActionResponse, err error) error {
-	if err != nil {
-		return err
+	passed := true
+	if res.Err != "" {
+		passed = false
 	}
-
-	cli.Printfln("Success: %v", pterm.Green(res.Success))
+	cli.Printfln("Success: %v", pterm.Green(passed))
 
 	if log.Verbose {
 		cli.Printfln("Command: %s", res.Action.Command)

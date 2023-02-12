@@ -42,5 +42,6 @@ func (s *Scheduler) Stop() error {
 
 func runAction(action action.Action) {
 	log.ForceInfof("Running schduled command '%s'", action.Name)
-	action.Execute()
+	log.ActionPreflight(&action)
+	log.LogResult(action.Execute())
 }
