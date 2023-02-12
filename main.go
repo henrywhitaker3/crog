@@ -11,13 +11,11 @@ import (
 	"github.com/henrywhitaker3/crog/internal/cmd/root"
 	"github.com/henrywhitaker3/crog/internal/config"
 	"github.com/henrywhitaker3/crog/internal/log"
-	flag "github.com/spf13/pflag"
 )
 
 func main() {
-	cfgPath := flag.StringP("config", "c", "crog.yaml", "config file")
-
-	cfg, err := config.LoadConfig(*cfgPath)
+	cfgPath := getConfigFilePath(os.Args[1:])
+	cfg, err := config.LoadConfig(cfgPath)
 	if err != nil {
 		fmt.Printf("Configuration error: %s\n", err)
 		os.Exit(1)
@@ -29,4 +27,17 @@ func main() {
 	if err := root.NewRootCmd(cfg).Execute(); err != nil {
 		os.Exit(1)
 	}
+}
+
+func getConfigFilePath(args []string) string {
+	path := "crog.yaml"
+
+	for i, arg := range args {
+		if arg == "-c" || arg == "--config" {
+			path = args[i+1]
+			break
+		}
+	}
+
+	return path
 }
