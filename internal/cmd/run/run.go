@@ -1,6 +1,8 @@
 package run
 
 import (
+	"time"
+
 	"github.com/henrywhitaker3/crog/internal/cli"
 	"github.com/henrywhitaker3/crog/internal/config"
 	"github.com/henrywhitaker3/crog/internal/events"
@@ -31,6 +33,9 @@ func NewRunCmd(cfg *config.Config) *cobra.Command {
 			if res.GetErr() != nil {
 				cli.ErrorExit(res.GetErr())
 			}
+
+			// Hacky way of letting all events finish processing
+			time.Sleep(time.Millisecond * 1)
 		},
 	}
 }
