@@ -35,7 +35,7 @@ type ActionScheduledLogger struct{}
 
 func (s *ActionScheduled) Handle(e domain.Event) error {
 	ev := e.(ActionScheduled)
-	log.Log.Infof("Scheduling action '%s' at '%s'", ev.Action.GetName(), ev.Action.GetCron())
+	log.Log.Debugf("Scheduling action '%s' at '%s'", ev.Action.GetName(), ev.Action.GetCron())
 	return nil
 }
 

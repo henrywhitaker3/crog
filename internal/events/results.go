@@ -22,7 +22,7 @@ func (a *ResultLogger) Handle(e domain.Event) error {
 			fmt.Sprintf("got exit code: %d", ev.Result.GetCode()),
 		),
 	)
-	log.Log.Info(
+	log.Log.Debug(
 		actionLogFormat(
 			ev.Result.GetAction(),
 			fmt.Sprintf("got stdout:\n%s", ev.Result.GetStdout()),
