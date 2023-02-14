@@ -9,4 +9,5 @@ type Listener interface {
 type EventHandler interface {
 	Register(Listener)
 	Trigger(Event)
+	Wait()
 }

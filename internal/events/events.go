@@ -2,12 +2,16 @@ package events
 
 import (
 	"reflect"
+	"sync"
 
 	"github.com/henrywhitaker3/crog/internal/domain"
 	"github.com/henrywhitaker3/crog/internal/log"
 )
 
-var EventHandler eventHandler = eventHandler{listeners: map[reflect.Type][]domain.Listener{}}
+var EventHandler eventHandler = eventHandler{
+	listeners: map[reflect.Type][]domain.Listener{},
+	wg:        &sync.WaitGroup{},
+}
 
 func Boot() {
 	EventHandler.Register(ServerStarted{}, &ServerStartedLogger{})
@@ -15,6 +19,8 @@ func Boot() {
 	EventHandler.Register(ActionPreflight{}, &ActionPreflightLogger{})
 	EventHandler.Register(ActionScheduled{}, &ActionScheduled{})
 	EventHandler.Register(RunScheduledAction{}, &RunScheduledActionLogger{})
+	EventHandler.Register(SchedulerStarted{}, &SchedulerStartedLogger{})
+	EventHandler.Register(SchedulerStopped{}, &SchedulerStoppedLogger{})
 }
 
 func Emit(event domain.Event) {
@@ -24,6 +30,7 @@ func Emit(event domain.Event) {
 
 type eventHandler struct {
 	listeners map[reflect.Type][]domain.Listener
+	wg        *sync.WaitGroup
 }
 
 func (a *eventHandler) Register(e domain.Event, l domain.Listener) {
@@ -33,8 +40,16 @@ func (a *eventHandler) Register(e domain.Event, l domain.Listener) {
 
 func (a eventHandler) Trigger(e domain.Event) {
 	for _, listener := range a.getListenersForEvent(e) {
-		go listener.Handle(e)
+		a.wg.Add(1)
+		go func(l domain.Listener) {
+			l.Handle(e)
+			a.wg.Done()
+		}(listener)
 	}
+}
+
+func (a *eventHandler) Wait() {
+	a.wg.Wait()
 }
 
 func (a eventHandler) getListenersForEvent(e domain.Event) []domain.Listener {
