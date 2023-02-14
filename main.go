@@ -10,6 +10,7 @@ import (
 
 	"github.com/henrywhitaker3/crog/internal/cmd/root"
 	"github.com/henrywhitaker3/crog/internal/config"
+	"github.com/henrywhitaker3/crog/internal/events"
 	"github.com/henrywhitaker3/crog/internal/log"
 )
 
@@ -20,9 +21,11 @@ func main() {
 		fmt.Printf("Configuration error: %s\n", err)
 		os.Exit(1)
 	}
-	if cfg.Verbose {
+	if cfg.Verbose || isVerboseFlagSet(os.Args[1:]) {
 		log.Verbose = true
 	}
+
+	events.Boot()
 
 	if err := root.NewRootCmd(cfg).Execute(); err != nil {
 		os.Exit(1)
@@ -40,4 +43,14 @@ func getConfigFilePath(args []string) string {
 	}
 
 	return path
+}
+
+func isVerboseFlagSet(args []string) bool {
+	for _, arg := range args {
+		if arg == "-v" || arg == "--verbose" {
+			return true
+		}
+	}
+
+	return false
 }
