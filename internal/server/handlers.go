@@ -24,9 +24,9 @@ func (s Server) Run(ctx context.Context, req *pb.RunActionRequest) (*pb.RunActio
 		return nil, err
 	}
 
-	events.Emit(&events.ActionPreflightHandler, events.ActionPreflight{Action: action})
+	events.Emit(events.ActionPreflight{Action: action})
 	res := action.Execute()
-	events.Emit(&events.ResultHandler, events.Result{Result: res})
+	events.Emit(events.Result{Result: res})
 
 	errS := ""
 	if res.GetErr() != nil {

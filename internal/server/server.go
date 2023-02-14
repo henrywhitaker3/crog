@@ -34,7 +34,7 @@ func New(cfg *config.Config) (*Server, error) {
 }
 
 func (s *Server) Start() error {
-	events.Emit(&events.ServerStartedHandler, events.ServerStarted{Address: s.cfg.Server.Listen})
+	events.Emit(events.ServerStarted{Address: s.cfg.Server.Listen})
 	lis, err := net.Listen("tcp", s.cfg.Server.Listen)
 	if err != nil {
 		return err

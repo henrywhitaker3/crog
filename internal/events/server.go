@@ -5,8 +5,6 @@ import (
 	"github.com/henrywhitaker3/crog/internal/log"
 )
 
-var ServerStartedHandler eventHandler
-
 type ServerStarted struct {
 	Address string
 }

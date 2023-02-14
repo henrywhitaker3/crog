@@ -24,11 +24,11 @@ func NewRunCmd(cfg *config.Config) *cobra.Command {
 			}
 			cli.Printfln("Running: %s", pterm.Green(action.Name))
 
-			events.Emit(&events.ActionPreflightHandler, events.ActionPreflight{Action: action})
+			events.Emit(events.ActionPreflight{Action: action})
 
 			res := action.Execute()
 			if log.Verbose {
-				events.Emit(&events.ResultHandler, events.Result{Result: res})
+				events.Emit(events.Result{Result: res})
 			}
 			if res.GetErr() != nil {
 				cli.ErrorExit(res.GetErr())

@@ -7,8 +7,6 @@ import (
 	"github.com/henrywhitaker3/crog/internal/log"
 )
 
-var ActionPreflightHandler eventHandler
-
 type ActionPreflight struct {
 	Action domain.Action
 }
