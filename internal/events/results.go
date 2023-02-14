@@ -17,7 +17,24 @@ type ResultLogger struct{}
 
 func (a *ResultLogger) Handle(e domain.Event) error {
 	ev := e.(Result)
-	fmt.Println("here")
-	log.LogResult(ev.Result)
+
+	log.Info(
+		actionLogFormat(
+			ev.Result.GetAction(),
+			fmt.Sprintf("got exit code: %d", ev.Result.GetCode()),
+		),
+	)
+	log.Info(
+		actionLogFormat(
+			ev.Result.GetAction(),
+			fmt.Sprintf("got stdout:\n%s", ev.Result.GetStdout()),
+		),
+	)
+	if ev.Result.GetErr() != nil {
+		log.ForceError(actionLogFormat(ev.Result.GetAction(), ev.Result.GetErr().Error()))
+	} else {
+		log.ForceInfo(actionLogFormat(ev.Result.GetAction(), "Check passed"))
+	}
+
 	return nil
 }
