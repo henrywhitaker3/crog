@@ -18,16 +18,18 @@ func NewRunCmd(cfg *config.Config) *cobra.Command {
 		Use:   "run [<remote_server> <remote_action>]",
 		Short: "Run crog actions on a remote server",
 		RunE: func(cmd *cobra.Command, args []string) error {
+			var err error
 			switch len(args) {
 			case 0:
-				return runInteractive(cfg)
+				err = runInteractive(cfg)
 			case 2:
 				// TODO: sort out remote/action autocompletion
-				return runManual(cfg, args[0], args[1])
+				err = runManual(cfg, args[0], args[1])
 			default:
-				return errors.New("invalid args")
+				err = errors.New("invalid args")
 			}
 			events.EventHandler.Wait()
+			return err
 		},
 	}
 }
