@@ -6,6 +6,7 @@ import (
 	"github.com/henrywhitaker3/crog/internal/cli"
 	"github.com/henrywhitaker3/crog/internal/client"
 	"github.com/henrywhitaker3/crog/internal/config"
+	"github.com/henrywhitaker3/crog/internal/events"
 	"github.com/henrywhitaker3/crog/internal/log"
 	"github.com/henrywhitaker3/crog/internal/pb"
 	"github.com/pterm/pterm"
@@ -26,6 +27,7 @@ func NewRunCmd(cfg *config.Config) *cobra.Command {
 			default:
 				return errors.New("invalid args")
 			}
+			events.EventHandler.Wait()
 		},
 	}
 }
