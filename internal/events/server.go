@@ -16,3 +16,12 @@ func (s *ServerStartedLogger) Handle(e domain.Event) error {
 	log.ForceInfof("Starting grpc server on %s", ev.Address)
 	return nil
 }
+
+type GrpcRequest struct{}
+
+type GrpcRequestLogger struct{}
+
+func (g *GrpcRequestLogger) Handle(e domain.Event) error {
+	// TODO: implement this
+	return nil
+}

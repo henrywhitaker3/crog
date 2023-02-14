@@ -13,6 +13,8 @@ func Boot() {
 	EventHandler.Register(ServerStarted{}, &ServerStartedLogger{})
 	EventHandler.Register(Result{}, &ResultLogger{})
 	EventHandler.Register(ActionPreflight{}, &ActionPreflightLogger{})
+	EventHandler.Register(ActionScheduled{}, &ActionScheduled{})
+	EventHandler.Register(RunScheduledAction{}, &RunScheduledActionLogger{})
 }
 
 func Emit(event domain.Event) {
@@ -30,11 +32,11 @@ func (a *eventHandler) Register(e domain.Event, l domain.Listener) {
 }
 
 func (a eventHandler) Trigger(e domain.Event) {
-	for _, listener := range a.getListeners(e) {
+	for _, listener := range a.getListenersForEvent(e) {
 		go listener.Handle(e)
 	}
 }
 
-func (a eventHandler) getListeners(e domain.Event) []domain.Listener {
+func (a eventHandler) getListenersForEvent(e domain.Event) []domain.Listener {
 	return a.listeners[reflect.TypeOf(e)]
 }

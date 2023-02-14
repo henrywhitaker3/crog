@@ -6,7 +6,6 @@ import (
 	"github.com/go-co-op/gocron"
 	"github.com/henrywhitaker3/crog/internal/action"
 	"github.com/henrywhitaker3/crog/internal/events"
-	"github.com/henrywhitaker3/crog/internal/log"
 )
 
 type Scheduler struct {
@@ -25,24 +24,27 @@ func (s *Scheduler) Start() error {
 	s.scheduler = gocron.NewScheduler(time.UTC)
 
 	for _, action := range s.actions {
-		log.Infof("Adding action '%s' to scheduler", action.Name)
 		s.scheduler.Cron(action.Cron).Do(runAction, action)
+		events.Emit(events.ActionScheduled{Action: &action})
 	}
 
-	log.ForceInfo("Starting schduler")
 	s.scheduler.StartAsync()
+	events.Emit(events.SchedulerStarted{})
 
 	return nil
 }
 
 func (s *Scheduler) Stop() error {
-	log.ForceInfo("Stopping scheduler")
+	events.Emit(events.SchedulerStopped{})
 	s.scheduler.Stop()
 	return nil
 }
 
 func runAction(action action.Action) {
-	log.ForceInfof("Running schduled command '%s'", action.Name)
+	events.Emit(events.RunScheduledAction{Action: &action})
 	events.Emit(events.ActionPreflight{Action: &action})
-	events.Emit(events.Result{Result: action.Execute()})
+
+	res := action.Execute()
+
+	events.Emit(events.Result{Result: res})
 }
