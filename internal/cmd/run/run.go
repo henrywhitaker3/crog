@@ -4,7 +4,6 @@ import (
 	"github.com/henrywhitaker3/crog/internal/cli"
 	"github.com/henrywhitaker3/crog/internal/config"
 	"github.com/henrywhitaker3/crog/internal/events"
-	"github.com/henrywhitaker3/crog/internal/log"
 	"github.com/pterm/pterm"
 	"github.com/spf13/cobra"
 )
@@ -25,9 +24,9 @@ func NewRunCmd(cfg *config.Config) *cobra.Command {
 			events.Emit(events.ActionPreflight{Action: action})
 
 			res := action.Execute()
-			if log.Log.Verbose {
-				events.Emit(events.Result{Result: res})
-			}
+
+			events.Emit(events.Result{Result: res})
+
 			if res.GetErr() != nil {
 				cli.ErrorExit(res.GetErr())
 			}

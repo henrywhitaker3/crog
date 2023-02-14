@@ -6,7 +6,6 @@ import (
 	"github.com/henrywhitaker3/crog/internal/cmd/run"
 	"github.com/henrywhitaker3/crog/internal/cmd/work"
 	"github.com/henrywhitaker3/crog/internal/config"
-	"github.com/henrywhitaker3/crog/internal/log"
 	"github.com/spf13/cobra"
 )
 
@@ -20,7 +19,7 @@ func NewRootCmd(cfg *config.Config) *cobra.Command {
 		// Run: func(cmd *cobra.Command, args []string) { },
 	}
 
-	cmd.PersistentFlags().BoolVarP(&log.Log.Verbose, "verbose", "v", false, "Turn on verbose logging")
+	cmd.PersistentFlags().BoolP("verbose", "v", false, "Turn on verbose logging")
 	cmd.PersistentFlags().StringP("config", "c", "crog.yaml", "Config file path")
 
 	cmd.AddCommand(

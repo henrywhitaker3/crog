@@ -16,7 +16,8 @@ import (
 
 func main() {
 	log.Log = &log.Logger{
-		Output: os.Stdout,
+		Output:    os.Stdout,
+		Verbosity: log.Error,
 	}
 
 	cfgPath := getConfigFilePath(os.Args[1:])
@@ -27,7 +28,7 @@ func main() {
 	}
 
 	if cfg.Verbose || isVerboseFlagSet(os.Args[1:]) {
-		log.Log.Verbose = true
+		log.Log.SetVerbosity(log.Debug)
 	}
 
 	events.Boot()

@@ -4,23 +4,23 @@ import (
 	"fmt"
 	"io"
 	"time"
+
+	"github.com/henrywhitaker3/crog/internal/domain"
 )
 
 var (
-	Log *Logger
+	Log domain.Logger
 )
 
 type Logger struct {
-	Verbose bool
-	Output  io.Writer
+	Verbosity domain.Verbosity
+	Output    io.Writer
 }
 
 func (l *Logger) Info(value string) {
-	l.printLog("INFO", value)
-}
-
-func (l *Logger) ForceInfo(value string) {
-	l.print("INFO", value)
+	if l.Verbosity >= Info {
+		l.print("INFO", value)
+	}
 }
 
 func (l *Logger) Infof(format string, args ...any) {
@@ -28,17 +28,10 @@ func (l *Logger) Infof(format string, args ...any) {
 	l.Info(value)
 }
 
-func (l *Logger) ForceInfof(format string, args ...any) {
-	value := fmt.Sprintf(format, args...)
-	l.ForceInfo(value)
-}
-
 func (l *Logger) Error(value string) {
-	l.printLog("ERROR", value)
-}
-
-func (l *Logger) ForceError(value string) {
-	l.print("ERROR", value)
+	if l.Verbosity >= Error {
+		l.print("ERROR", value)
+	}
 }
 
 func (l *Logger) Errorf(format string, args ...any) {
@@ -46,19 +39,27 @@ func (l *Logger) Errorf(format string, args ...any) {
 	l.Error(value)
 }
 
-func (l *Logger) ForceErrorf(format string, args ...any) {
-	value := fmt.Sprintf(format, args...)
-	l.ForceError(value)
+func (l *Logger) Debug(value string) {
+	if l.Verbosity >= Debug {
+		l.print("DEBUG", value)
+	}
 }
 
-func (l *Logger) printLog(level, content string) {
-	if l.Verbose {
-		l.print(level, content)
-	}
+func (l *Logger) Debugf(format string, args ...any) {
+	value := fmt.Sprintf(format, args...)
+	l.Debug(value)
 }
 
 func (l *Logger) print(level, content string) {
 	t := time.Now()
 
 	fmt.Fprintf(l.Output, "[%s] %s: %s\n", t.Format(time.RFC3339), level, content)
+}
+
+func (l *Logger) SetVerbosity(v domain.Verbosity) {
+	l.Verbosity = v
+}
+
+func (l *Logger) GetVerbosity() domain.Verbosity {
+	return l.Verbosity
 }

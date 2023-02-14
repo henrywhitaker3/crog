@@ -85,7 +85,7 @@ func handleActionResponse(res *pb.RunActionResponse, err error) error {
 	}
 	cli.Printfln("Success: %v", pterm.Green(passed))
 
-	if log.Log.Verbose {
+	if log.Log.GetVerbosity() >= log.Debug {
 		cli.Printfln("Command: %s", res.Action.Command)
 		cli.Printfln("Code: %d", res.Code)
 		cli.Printfln("Stdout:\n%s", res.Stdout)

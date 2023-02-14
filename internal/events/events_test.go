@@ -1,6 +1,8 @@
 package events
 
 import (
+	"bytes"
+	"io"
 	"os"
 	"reflect"
 	"sync"
@@ -21,13 +23,18 @@ func (t *testListener) Handle(e domain.Event) error {
 	return nil
 }
 
+var logOut io.Writer = bytes.NewBuffer([]byte{})
+
 func TestMain(m *testing.M) {
 	log.Log = &log.Logger{
-		Verbose: true,
-		Output:  os.Stdout,
+		Verbosity: log.Debug,
+		Output:    logOut,
 	}
 
 	code := m.Run()
+
+	logOut = bytes.NewBuffer([]byte{})
+
 	os.Exit(code)
 }
 

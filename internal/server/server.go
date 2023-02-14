@@ -52,7 +52,7 @@ func (s *Server) Start() error {
 }
 
 func (s *Server) Stop() error {
-	log.Log.ForceInfo("Stopping grpc server")
+	log.Log.Debug("Stopping grpc server")
 	s.grpcServer.GracefulStop()
 	lis := *s.listener
 	lis.Close()

@@ -29,9 +29,9 @@ func (a *ResultLogger) Handle(e domain.Event) error {
 		),
 	)
 	if ev.Result.GetErr() != nil {
-		log.Log.ForceError(actionLogFormat(ev.Result.GetAction(), ev.Result.GetErr().Error()))
+		log.Log.Error(actionLogFormat(ev.Result.GetAction(), ev.Result.GetErr().Error()))
 	} else {
-		log.Log.ForceInfo(actionLogFormat(ev.Result.GetAction(), "Check passed"))
+		log.Log.Info(actionLogFormat(ev.Result.GetAction(), "Check passed"))
 	}
 
 	return nil
