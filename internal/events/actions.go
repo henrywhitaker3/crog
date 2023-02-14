@@ -17,9 +17,7 @@ func (a *ActionPreflightLogger) Handle(e domain.Event) error {
 	ev := e.(ActionPreflight)
 
 	log.Log.Info(actionLogFormat(ev.Action, "Running action"))
-
-	log.Log.Debug(actionLogFormat(ev.Action, fmt.Sprintf("executable: %s", ev.Action.GetExecutable())))
-	log.Log.Debug(actionLogFormat(ev.Action, fmt.Sprintf("args: %s", ev.Action.GetArguments())))
+	log.Log.Debug(actionLogFormat(ev.Action, fmt.Sprintf("command: %s", ev.Action.GetCommand())))
 
 	return nil
 }

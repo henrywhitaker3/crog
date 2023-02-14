@@ -1,12 +1,10 @@
 package action
 
 import (
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os/exec"
 
-	"github.com/google/shlex"
 	"github.com/henrywhitaker3/crog/internal/domain"
 	"github.com/henrywhitaker3/crog/internal/validation"
 )
@@ -39,7 +37,7 @@ func (a *Action) Execute() domain.Result {
 
 	if code != a.Code {
 		a.fail()
-		res.Err = fmt.Errorf("check failed - expected status %d, got %d", a.Code, code)
+		res.Err = ActionFailed{Expected: a.Code, Actual: code}
 		return res
 	}
 
@@ -49,10 +47,7 @@ func (a *Action) Execute() domain.Result {
 }
 
 func (a *Action) runCommand() (int, string) {
-	args, _ := shlex.Split(a.Command)
-	bin := args[0]
-	args = args[1:]
-	cmd := exec.Command(bin, args...)
+	cmd := exec.Command("/bin/bash", "-c", a.Command)
 	out, err := cmd.Output()
 
 	exitCode := 0
@@ -124,14 +119,4 @@ func (a Action) GetCommand() string {
 
 func (a Action) GetCron() string {
 	return a.Cron
-}
-
-func (a Action) GetExecutable() string {
-	args, _ := shlex.Split(a.Command)
-	return args[0]
-}
-
-func (a Action) GetArguments() []string {
-	args, _ := shlex.Split(a.Command)
-	return args[1:]
 }

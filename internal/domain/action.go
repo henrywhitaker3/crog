@@ -5,8 +5,6 @@ type Action interface {
 
 	GetName() string
 	GetCommand() string
-	GetExecutable() string
-	GetArguments() []string
 	GetCron() string
 }
 

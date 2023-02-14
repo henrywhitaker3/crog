@@ -22,7 +22,9 @@ func NewRunCmd(cfg *config.Config) *cobra.Command {
 			}
 			cli.Printfln("Running: %s", pterm.Green(action.Name))
 
-			events.Emit(events.ActionPreflight{Action: action})
+			if log.Log.GetVerbosity() >= log.Debug {
+				events.Emit(events.ActionPreflight{Action: action})
+			}
 
 			res := action.Execute()
 
