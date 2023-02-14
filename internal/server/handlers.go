@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/henrywhitaker3/crog/internal/action"
+	"github.com/henrywhitaker3/crog/internal/events"
 	"github.com/henrywhitaker3/crog/internal/log"
 	"github.com/henrywhitaker3/crog/internal/pb"
 )
@@ -25,8 +26,9 @@ func (s Server) Run(ctx context.Context, req *pb.RunActionRequest) (*pb.RunActio
 	}
 	log.ForceInfof(log.ActionLogFormat(action, "Running grpc handler"))
 
+	events.Emit(&events.ActionPreflightHandler, events.ActionPreflight{Action: action})
 	res := action.Execute()
-	log.LogResult(res)
+	events.Emit(&events.ResultHandler, events.Result{Result: res})
 
 	errS := ""
 	if res.GetErr() != nil {
