@@ -15,15 +15,15 @@ import (
 )
 
 func main() {
+	log.Log = &log.Logger{
+		Output: os.Stdout,
+	}
+
 	cfgPath := getConfigFilePath(os.Args[1:])
 	cfg, err := config.LoadConfig(cfgPath)
 	if err != nil {
 		fmt.Printf("Configuration error: %s\n", err)
 		os.Exit(1)
-	}
-
-	log.Log = &log.Logger{
-		Output: os.Stdout,
 	}
 
 	if cfg.Verbose || isVerboseFlagSet(os.Args[1:]) {
