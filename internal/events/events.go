@@ -10,6 +10,7 @@ import (
 func Boot() {
 	ActionPreflightHandler.Register(&ActionPreflightLogger{})
 	ResultHandler.Register(&ResultLogger{})
+	ServerStartedHandler.Register(&ServerStartedLogger{})
 }
 
 func Emit(handler domain.EventHandler, event domain.Event) {

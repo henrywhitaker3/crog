@@ -4,6 +4,7 @@ import (
 	"net"
 
 	"github.com/henrywhitaker3/crog/internal/config"
+	"github.com/henrywhitaker3/crog/internal/events"
 	"github.com/henrywhitaker3/crog/internal/log"
 	"github.com/henrywhitaker3/crog/internal/pb"
 	"google.golang.org/grpc"
@@ -33,7 +34,7 @@ func New(cfg *config.Config) (*Server, error) {
 }
 
 func (s *Server) Start() error {
-	log.ForceInfof("Starting grpc server on %s", s.cfg.Server.Listen)
+	events.Emit(&events.ServerStartedHandler, events.ServerStarted{Address: s.cfg.Server.Listen})
 	lis, err := net.Listen("tcp", s.cfg.Server.Listen)
 	if err != nil {
 		return err
