@@ -16,8 +16,8 @@ type ActionPreflightLogger struct{}
 func (a *ActionPreflightLogger) Handle(e domain.Event) error {
 	ev := e.(ActionPreflight)
 
-	log.Info(actionLogFormat(ev.Action, fmt.Sprintf("executable: %s", ev.Action.GetExecutable())))
-	log.Info(actionLogFormat(ev.Action, fmt.Sprintf("args: %s", ev.Action.GetArguments())))
+	log.Log.Info(actionLogFormat(ev.Action, fmt.Sprintf("executable: %s", ev.Action.GetExecutable())))
+	log.Log.Info(actionLogFormat(ev.Action, fmt.Sprintf("args: %s", ev.Action.GetArguments())))
 
 	return nil
 }

@@ -21,8 +21,13 @@ func main() {
 		fmt.Printf("Configuration error: %s\n", err)
 		os.Exit(1)
 	}
+
+	log.Log = &log.Logger{
+		Output: os.Stdout,
+	}
+
 	if cfg.Verbose || isVerboseFlagSet(os.Args[1:]) {
-		log.Verbose = true
+		log.Log.Verbose = true
 	}
 
 	events.Boot()

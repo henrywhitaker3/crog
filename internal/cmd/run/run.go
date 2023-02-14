@@ -25,7 +25,7 @@ func NewRunCmd(cfg *config.Config) *cobra.Command {
 			events.Emit(events.ActionPreflight{Action: action})
 
 			res := action.Execute()
-			if log.Verbose {
+			if log.Log.Verbose {
 				events.Emit(events.Result{Result: res})
 			}
 			if res.GetErr() != nil {

@@ -13,7 +13,7 @@ type ServerStartedLogger struct{}
 
 func (s *ServerStartedLogger) Handle(e domain.Event) error {
 	ev := e.(ServerStarted)
-	log.ForceInfof("Starting grpc server on %s", ev.Address)
+	log.Log.ForceInfof("Starting grpc server on %s", ev.Address)
 	return nil
 }
 

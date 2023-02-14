@@ -2,55 +2,63 @@ package log
 
 import (
 	"fmt"
+	"io"
 	"time"
 )
 
-var Verbose bool = false
+var (
+	Log *Logger
+)
 
-func Info(value string) {
-	printLog("INFO", value)
+type Logger struct {
+	Verbose bool
+	Output  io.Writer
 }
 
-func ForceInfo(value string) {
-	print("INFO", value)
+func (l *Logger) Info(value string) {
+	l.printLog("INFO", value)
 }
 
-func Infof(format string, args ...any) {
+func (l *Logger) ForceInfo(value string) {
+	l.print("INFO", value)
+}
+
+func (l *Logger) Infof(format string, args ...any) {
 	value := fmt.Sprintf(format, args...)
-	Info(value)
+	l.Info(value)
 }
 
-func ForceInfof(format string, args ...any) {
+func (l *Logger) ForceInfof(format string, args ...any) {
 	value := fmt.Sprintf(format, args...)
-	ForceInfo(value)
+	l.ForceInfo(value)
 }
 
-func Error(value string) {
-	printLog("ERROR", value)
+func (l *Logger) Error(value string) {
+	l.printLog("ERROR", value)
 }
 
-func ForceError(value string) {
-	print("ERROR", value)
+func (l *Logger) ForceError(value string) {
+	l.print("ERROR", value)
 }
 
-func Errorf(format string, args ...any) {
+func (l *Logger) Errorf(format string, args ...any) {
 	value := fmt.Sprintf(format, args...)
-	Error(value)
+	l.Error(value)
 }
 
-func ForceErrorf(format string, args ...any) {
+func (l *Logger) ForceErrorf(format string, args ...any) {
 	value := fmt.Sprintf(format, args...)
-	ForceError(value)
+	l.ForceError(value)
 }
 
-func printLog(level, content string) {
-	if Verbose {
-		print(level, content)
+func (l *Logger) printLog(level, content string) {
+	if l.Verbose {
+		l.print(level, content)
 	}
 }
 
-func print(level, content string) {
+func (l *Logger) print(level, content string) {
 	t := time.Now()
 
-	fmt.Printf("[%s] %s: %s\n", t.Format(time.RFC3339), level, content)
+	fmt.Fprintf(l.Output, "[%s] %s: %s\n", t.Format(time.RFC3339), level, content)
 }

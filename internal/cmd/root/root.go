@@ -20,7 +20,7 @@ func NewRootCmd(cfg *config.Config) *cobra.Command {
 		// Run: func(cmd *cobra.Command, args []string) { },
 	}
 
-	cmd.PersistentFlags().BoolVarP(&log.Verbose, "verbose", "v", false, "Turn on verbose logging")
+	cmd.PersistentFlags().BoolVarP(&log.Log.Verbose, "verbose", "v", false, "Turn on verbose logging")
 	cmd.PersistentFlags().StringP("config", "c", "crog.yaml", "Config file path")
 
 	cmd.AddCommand(

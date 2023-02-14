@@ -1,11 +1,13 @@
 package events
 
 import (
+	"os"
 	"reflect"
 	"sync"
 	"testing"
 
 	"github.com/henrywhitaker3/crog/internal/domain"
+	"github.com/henrywhitaker3/crog/internal/log"
 )
 
 type testEvent struct{}
@@ -17,6 +19,16 @@ type testListener struct {
 func (t *testListener) Handle(e domain.Event) error {
 	t.hasRun = true
 	return nil
+}
+
+func TestMain(m *testing.M) {
+	log.Log = &log.Logger{
+		Verbose: true,
+		Output:  os.Stdout,
+	}
+
+	code := m.Run()
+	os.Exit(code)
 }
 
 func TestItRegistersEventsToListeners(t *testing.T) {

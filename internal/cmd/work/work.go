@@ -34,7 +34,7 @@ func NewWorkCmd(cfg *config.Config) *cobra.Command {
 				}
 			}
 
-			log.Info("Registering signal handlers for graceful shutdown")
+			log.Log.Info("Registering signal handlers for graceful shutdown")
 
 			sig := make(chan os.Signal, 1)
 			signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)

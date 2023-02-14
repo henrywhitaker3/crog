@@ -12,7 +12,7 @@ type SchedulerStarted struct {
 type SchedulerStartedLogger struct{}
 
 func (s *SchedulerStartedLogger) Handle(e domain.Event) error {
-	log.Info("Scheduler started")
+	log.Log.Info("Scheduler started")
 	return nil
 }
 
@@ -23,7 +23,7 @@ type SchedulerStopped struct {
 type SchedulerStoppedLogger struct{}
 
 func (s *SchedulerStoppedLogger) Handle(e domain.Event) error {
-	log.Info("Scheduler stopped")
+	log.Log.Info("Scheduler stopped")
 	return nil
 }
 
@@ -35,7 +35,7 @@ type ActionScheduledLogger struct{}
 
 func (s *ActionScheduled) Handle(e domain.Event) error {
 	ev := e.(ActionScheduled)
-	log.Infof("Scheduling action '%s' at '%s'", ev.Action.GetName(), ev.Action.GetCron())
+	log.Log.Infof("Scheduling action '%s' at '%s'", ev.Action.GetName(), ev.Action.GetCron())
 	return nil
 }
 
@@ -47,6 +47,6 @@ type RunScheduledActionLogger struct{}
 
 func (s *RunScheduledActionLogger) Handle(e domain.Event) error {
 	ev := e.(RunScheduledAction)
-	log.Infof("Running scheduled action %s", ev.Action.GetName())
+	log.Log.Infof("Running scheduled action %s", ev.Action.GetName())
 	return nil
 }
