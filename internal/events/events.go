@@ -24,7 +24,7 @@ func Boot() {
 }
 
 func Emit(event domain.Event) {
-	log.Log.Infof("Emitting event %s", reflect.TypeOf(event))
+	log.Log.Debugf("Emitting event %s", reflect.TypeOf(event))
 	EventHandler.Trigger(event)
 }
 
@@ -34,7 +34,7 @@ type eventHandler struct {
 }
 
 func (a *eventHandler) Register(e domain.Event, l domain.Listener) {
-	log.Log.Infof("Registering event %s to listener %s", reflect.TypeOf(e), reflect.TypeOf(l))
+	log.Log.Debugf("Registering event %s to listener %s", reflect.TypeOf(e), reflect.TypeOf(l))
 	a.listeners[reflect.TypeOf(e)] = append(a.listeners[reflect.TypeOf(e)], l)
 }
 

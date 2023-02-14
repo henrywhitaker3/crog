@@ -17,7 +17,7 @@ import (
 func main() {
 	log.Log = &log.Logger{
 		Output:    os.Stdout,
-		Verbosity: log.Error,
+		Verbosity: log.Info,
 	}
 
 	cfgPath := getConfigFilePath(os.Args[1:])
