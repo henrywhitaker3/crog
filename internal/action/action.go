@@ -7,6 +7,7 @@ import (
 	"os/exec"
 
 	"github.com/google/shlex"
+	"github.com/henrywhitaker3/crog/internal/domain"
 	"github.com/henrywhitaker3/crog/internal/validation"
 )
 
@@ -18,26 +19,19 @@ type Action struct {
 	On      On     `yaml:"when"`
 }
 
-type Result struct {
-	Action *Action
-	Err    error
-	Code   int
-	Stdout string
-}
-
 var client *http.Client
 
 func init() {
 	client = &http.Client{}
 }
 
-func (a *Action) Execute() *Result {
+func (a *Action) Execute() domain.Result {
 	// TODO: add results struct for start/failure/success actions
 	a.start()
 
 	code, out := a.runCommand()
 
-	res := &Result{
+	res := Result{
 		Action: a,
 		Code:   code,
 		Stdout: out,
@@ -118,4 +112,26 @@ func (a *Action) Validate() error {
 		return err
 	}
 	return validation.Validate(a)
+}
+
+func (a Action) GetName() string {
+	return a.Name
+}
+
+func (a Action) GetCommand() string {
+	return a.Command
+}
+
+func (a Action) GetCron() string {
+	return a.Cron
+}
+
+func (a Action) GetExecutable() string {
+	args, _ := shlex.Split(a.Command)
+	return args[0]
+}
+
+func (a Action) GetArguments() []string {
+	args, _ := shlex.Split(a.Command)
+	return args[1:]
 }

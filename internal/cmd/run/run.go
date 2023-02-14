@@ -26,8 +26,8 @@ func NewRunCmd(cfg *config.Config) *cobra.Command {
 			if log.Verbose {
 				log.LogResult(res)
 			}
-			if res.Err != nil {
-				cli.ErrorExit(res.Err)
+			if res.GetErr() != nil {
+				cli.ErrorExit(res.GetErr())
 			}
 		},
 	}

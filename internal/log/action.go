@@ -3,46 +3,42 @@ package log
 import (
 	"fmt"
 
-	"github.com/google/shlex"
-	"github.com/henrywhitaker3/crog/internal/action"
+	"github.com/henrywhitaker3/crog/internal/domain"
 )
 
-func ActionPreflight(a *action.Action) {
-	args, _ := shlex.Split(a.Command)
-	bin := args[0]
-	args = args[1:]
-	Info(ActionLogFormat(a, fmt.Sprintf("executable: %s", bin)))
-	Info(ActionLogFormat(a, fmt.Sprintf("args: %s", args)))
+func ActionPreflight(a domain.Action) {
+	Info(ActionLogFormat(a, fmt.Sprintf("executable: %s", a.GetExecutable())))
+	Info(ActionLogFormat(a, fmt.Sprintf("args: %s", a.GetArguments())))
 }
 
-func LogResult(res *action.Result) {
+func LogResult(res domain.Result) {
 	Info(
 		ActionLogFormat(
-			res.Action,
-			fmt.Sprintf("got exit code: %d", res.Code),
+			res.GetAction(),
+			fmt.Sprintf("got exit code: %d", res.GetCode()),
 		),
 	)
 	Info(
 		ActionLogFormat(
-			res.Action,
-			fmt.Sprintf("got stdout:\n%s", res.Stdout),
+			res.GetAction(),
+			fmt.Sprintf("got stdout:\n%s", res.GetStdout()),
 		),
 	)
-	if res.Err != nil {
+	if res.GetErr() != nil {
 		logResultFailure(res)
 		return
 	}
 	logResultSuccess(res)
 }
 
-func logResultSuccess(res *action.Result) {
-	ForceInfo(ActionLogFormat(res.Action, "Check passed"))
+func logResultSuccess(res domain.Result) {
+	ForceInfo(ActionLogFormat(res.GetAction(), "Check passed"))
 }
 
-func logResultFailure(res *action.Result) {
-	ForceError(ActionLogFormat(res.Action, res.Err.Error()))
+func logResultFailure(res domain.Result) {
+	ForceError(ActionLogFormat(res.GetAction(), res.GetErr().Error()))
 }
 
-func ActionLogFormat(a *action.Action, value string) string {
-	return fmt.Sprintf("[%s] %s", a.Name, value)
+func ActionLogFormat(a domain.Action, value string) string {
+	return fmt.Sprintf("[%s] %s", a.GetName(), value)
 }
