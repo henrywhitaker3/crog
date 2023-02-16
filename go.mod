@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/fatih/structs v1.1.0
 	github.com/go-co-op/gocron v1.18.0
+	github.com/henrywhitaker3/events v1.0.0
 	github.com/oleiade/reflections v1.0.1
 	github.com/pterm/pterm v0.12.53
 	github.com/spf13/cobra v1.6.1

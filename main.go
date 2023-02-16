@@ -10,7 +10,7 @@ import (
 
 	"github.com/henrywhitaker3/crog/internal/cmd/root"
 	"github.com/henrywhitaker3/crog/internal/config"
-	"github.com/henrywhitaker3/crog/internal/events"
+	"github.com/henrywhitaker3/crog/internal/event"
 	"github.com/henrywhitaker3/crog/internal/log"
 )
 
@@ -31,7 +31,9 @@ func main() {
 		log.Log.SetVerbosity(log.Debug)
 	}
 
-	events.Boot()
+	event.Boot()
+	defer event.EventHandler.Close()
+	event.EventHandler.Watch()
 
 	if err := root.NewRootCmd(cfg).Execute(); err != nil {
 		os.Exit(1)

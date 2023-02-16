@@ -8,7 +8,6 @@ import (
 
 	"github.com/henrywhitaker3/crog/internal/config"
 	"github.com/henrywhitaker3/crog/internal/domain"
-	"github.com/henrywhitaker3/crog/internal/events"
 	"github.com/henrywhitaker3/crog/internal/log"
 	"github.com/henrywhitaker3/crog/internal/scheduler"
 	"github.com/henrywhitaker3/crog/internal/server"
@@ -45,8 +44,6 @@ func NewWorkCmd(cfg *config.Config) *cobra.Command {
 					return err
 				}
 			}
-
-			events.EventHandler.Wait()
 
 			return nil
 		},

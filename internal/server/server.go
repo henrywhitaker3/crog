@@ -4,9 +4,10 @@ import (
 	"net"
 
 	"github.com/henrywhitaker3/crog/internal/config"
-	"github.com/henrywhitaker3/crog/internal/events"
+	"github.com/henrywhitaker3/crog/internal/event"
 	"github.com/henrywhitaker3/crog/internal/log"
 	"github.com/henrywhitaker3/crog/internal/pb"
+	"github.com/henrywhitaker3/events"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -34,7 +35,7 @@ func New(cfg *config.Config) (*Server, error) {
 }
 
 func (s *Server) Start() error {
-	events.Emit(events.ServerStarted{Address: s.cfg.Server.Listen})
+	event.Emit(events.Event{Tag: "ServerStarted", Data: s.cfg.Server.Listen})
 	lis, err := net.Listen("tcp", s.cfg.Server.Listen)
 	if err != nil {
 		return err

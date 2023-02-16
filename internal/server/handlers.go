@@ -4,8 +4,9 @@ import (
 	"context"
 
 	"github.com/henrywhitaker3/crog/internal/action"
-	"github.com/henrywhitaker3/crog/internal/events"
+	"github.com/henrywhitaker3/crog/internal/event"
 	"github.com/henrywhitaker3/crog/internal/pb"
+	"github.com/henrywhitaker3/events"
 )
 
 func (s Server) List(context.Context, *pb.ListActionsRequest) (*pb.ListActionsResponse, error) {
@@ -24,9 +25,9 @@ func (s Server) Run(ctx context.Context, req *pb.RunActionRequest) (*pb.RunActio
 		return nil, err
 	}
 
-	events.Emit(events.ActionPreflight{Action: action})
+	event.Emit(events.Event{Tag: "ActionPreflight", Data: action})
 	res := action.Execute()
-	events.Emit(events.Result{Result: res})
+	event.Emit(events.Event{Tag: "Result", Data: res})
 
 	errS := ""
 	if res.GetErr() != nil {
