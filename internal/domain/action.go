@@ -6,6 +6,7 @@ type Action interface {
 	GetName() string
 	GetCommand() string
 	GetCron() string
+	GetTries() int
 }
 
 type Result interface {
@@ -13,4 +14,5 @@ type Result interface {
 	GetCode() int
 	GetStdout() string
 	GetAction() Action
+	GetTries() int
 }

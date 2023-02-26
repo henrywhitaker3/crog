@@ -7,6 +7,7 @@ type Result struct {
 	Err    error
 	Code   int
 	Stdout string
+	Tries  int
 }
 
 func (r Result) GetErr() error {
@@ -23,4 +24,8 @@ func (r Result) GetStdout() string {
 
 func (r Result) GetAction() domain.Action {
 	return r.Action
+}
+
+func (r Result) GetTries() int {
+	return r.Tries
 }

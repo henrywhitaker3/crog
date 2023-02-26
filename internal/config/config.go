@@ -11,12 +11,12 @@ import (
 )
 
 type Config struct {
-	Version  string          `yaml:"version" required:"true"`
-	Actions  []action.Action `yaml:"actions"`
-	Verbose  bool            `yaml:"verbose" default:"false"`
-	Timezone string          `yaml:"timezone" default:"UTC"`
-	Server   ServerConfig    `yaml:"server"`
-	Remotes  []Remote        `yaml:"remotes"`
+	Version  string           `yaml:"version" required:"true"`
+	Actions  []*action.Action `yaml:"actions"`
+	Verbose  bool             `yaml:"verbose" default:"false"`
+	Timezone string           `yaml:"timezone" default:"UTC"`
+	Server   ServerConfig     `yaml:"server"`
+	Remotes  []Remote         `yaml:"remotes"`
 }
 
 type ServerConfig struct {
@@ -62,7 +62,7 @@ func LoadConfig(path string) (*Config, error) {
 func (cfg *Config) GetAction(name string) (*action.Action, error) {
 	for _, chk := range cfg.Actions {
 		if chk.Name == name {
-			return &chk, nil
+			return chk, nil
 		}
 	}
 
@@ -86,9 +86,11 @@ func (cfg *Config) Validate() error {
 	}
 
 	for i, action := range cfg.Actions {
+		fmt.Println(action)
 		if err := action.Validate(); err != nil {
 			return fmt.Errorf("actions[%d]: %s", i, err)
 		}
+		fmt.Println(action)
 	}
 
 	for i, remote := range cfg.Remotes {

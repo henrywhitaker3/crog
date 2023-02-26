@@ -8,7 +8,7 @@ import (
 
 func TestItGetsAnActionByName(t *testing.T) {
 	cfg := Config{
-		Actions: []action.Action{
+		Actions: []*action.Action{
 			{Name: "bongo"},
 		},
 	}
@@ -20,7 +20,7 @@ func TestItGetsAnActionByName(t *testing.T) {
 
 func TestItErrorsWhenThereIsNoAction(t *testing.T) {
 	cfg := Config{
-		Actions: []action.Action{},
+		Actions: []*action.Action{},
 	}
 
 	if _, err := cfg.GetAction("bongo"); err == nil {

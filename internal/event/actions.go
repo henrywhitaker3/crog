@@ -15,6 +15,7 @@ func (al *ActionPreflightLogger) Handle(e events.Event) error {
 
 	log.Log.Info(actionLogFormat(a, "Running action"))
 	log.Log.Debug(actionLogFormat(a, fmt.Sprintf("command: %s", a.GetCommand())))
+	log.Log.Debug(actionLogFormat(a, fmt.Sprintf("tries: %d", a.GetTries())))
 
 	return nil
 }

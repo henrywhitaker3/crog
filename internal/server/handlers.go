@@ -13,7 +13,7 @@ func (s Server) List(context.Context, *pb.ListActionsRequest) (*pb.ListActionsRe
 	acts := []*pb.Action{}
 
 	for _, a := range s.cfg.Actions {
-		acts = append(acts, actionToPbAction(&a))
+		acts = append(acts, actionToPbAction(a))
 	}
 
 	return &pb.ListActionsResponse{Actions: acts}, nil

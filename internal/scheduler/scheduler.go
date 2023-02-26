@@ -10,11 +10,11 @@ import (
 )
 
 type Scheduler struct {
-	actions   []action.Action
+	actions   []*action.Action
 	scheduler *gocron.Scheduler
 }
 
-func New(time *time.Location, actions []action.Action) *Scheduler {
+func New(time *time.Location, actions []*action.Action) *Scheduler {
 	return &Scheduler{
 		actions:   actions,
 		scheduler: gocron.NewScheduler(time),

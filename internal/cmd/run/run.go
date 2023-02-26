@@ -1,6 +1,8 @@
 package run
 
 import (
+	"fmt"
+
 	"github.com/henrywhitaker3/crog/internal/cli"
 	"github.com/henrywhitaker3/crog/internal/config"
 	"github.com/henrywhitaker3/crog/internal/event"
@@ -22,6 +24,7 @@ func NewRunCmd(cfg *config.Config) *cobra.Command {
 				cli.ErrorExit(err)
 			}
 			cli.Printfln("Running: %s", pterm.Green(action.Name))
+			fmt.Println(action.GetTries())
 
 			if log.Log.GetVerbosity() >= log.Debug {
 				event.Emit(events.Event{Tag: "ActionPreflight", Data: action})

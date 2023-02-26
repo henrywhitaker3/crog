@@ -1,10 +1,12 @@
 package action
 
 import (
+	"context"
 	"io/ioutil"
 	"net/http"
 	"os/exec"
 
+	"github.com/henrywhitaker3/crog/internal/circuits"
 	"github.com/henrywhitaker3/crog/internal/domain"
 	"github.com/henrywhitaker3/crog/internal/validation"
 )
@@ -14,6 +16,7 @@ type Action struct {
 	Command string `yaml:"command" required:"true"`
 	Code    int    `yaml:"code" default:"0"`
 	Cron    string `yaml:"cron" default:"* * * * *"`
+	Tries   int    `yaml:"tries" default:"1"`
 	On      On     `yaml:"when"`
 }
 
@@ -27,21 +30,30 @@ func (a *Action) Execute() domain.Result {
 	// TODO: add results struct for start/failure/success actions
 	a.start()
 
-	code, out := a.runCommand()
+	tries := 0
+	retry := circuits.Retry(func(ctx context.Context) (any, error) {
+		tries++
+		code, out := a.runCommand()
 
-	res := Result{
-		Action: a,
-		Code:   code,
-		Stdout: out,
-	}
+		res := Result{
+			Action: a,
+			Code:   code,
+			Stdout: out,
+		}
 
-	if code != a.Code {
-		a.fail()
-		res.Err = ActionFailed{Expected: a.Code, Actual: code}
-		return res
-	}
+		if code != a.Code {
+			a.fail()
+			res.Err = ActionFailed{Expected: a.Code, Actual: code}
+			return res, res.Err
+		}
 
-	a.success()
+		a.success()
+		return res, nil
+	}, a.Tries)
+
+	r, _ := retry(context.Background())
+	res := r.(Result)
+	res.Tries = tries
 
 	return res
 }
@@ -119,4 +131,8 @@ func (a Action) GetCommand() string {
 
 func (a Action) GetCron() string {
 	return a.Cron
+}
+
+func (a Action) GetTries() int {
+	return a.Tries
 }

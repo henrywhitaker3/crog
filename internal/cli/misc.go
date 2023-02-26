@@ -8,13 +8,13 @@ import (
 	"github.com/pterm/pterm"
 )
 
-func PrintActionTable(actions []action.Action) error {
+func PrintActionTable(actions []*action.Action) error {
 	lines := [][]string{
-		{"Name", "Command", "Code", "Cron"},
+		{"Name", "Command", "Code", "Cron", "Tries"},
 	}
 
 	for _, action := range actions {
-		lines = append(lines, []string{action.Name, action.Command, fmt.Sprintf("%d", action.Code), action.Cron})
+		lines = append(lines, []string{action.Name, action.Command, fmt.Sprintf("%d", action.Code), action.Cron, fmt.Sprintf("%d", action.Tries)})
 	}
 	return pterm.DefaultTable.WithHasHeader().WithData(lines).Render()
 }
@@ -30,7 +30,7 @@ func PrintRemoteTable(remotes []config.Remote) error {
 	return pterm.DefaultTable.WithHasHeader().WithData(lines).Render()
 }
 
-func GetActionNames(actions []action.Action) []string {
+func GetActionNames(actions []*action.Action) []string {
 	names := []string{}
 
 	for _, action := range actions {
