@@ -1,25 +1,30 @@
 package circuits
 
-import "context"
+import (
+	"context"
+	"errors"
+	"time"
+
+	"github.com/henrywhitaker3/crog/internal/log"
+)
 
 type Effector func(context.Context) (any, error)
 
-func Retry(e Effector, tries int) Effector {
+func Retry(e Effector, tries int, delay time.Duration) Effector {
 	return func(ctx context.Context) (any, error) {
-		var out any
-		var err error
 		for i := 0; i < tries; i++ {
-			out, err = e(ctx)
-			if err == nil {
+			log.Log.Debugf("Retry attempt %d", i+1)
+			out, err := e(ctx)
+			if err == nil || i >= (tries-1) {
 				return out, err
 			}
 
 			select {
+			case <-time.After(delay):
 			case <-ctx.Done():
 				return nil, ctx.Err()
-			default:
 			}
 		}
-		return out, err
+		return nil, errors.New("retry error ft")
 	}
 }

@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os/exec"
+	"time"
 
 	"github.com/henrywhitaker3/crog/internal/circuits"
 	"github.com/henrywhitaker3/crog/internal/domain"
@@ -49,7 +50,7 @@ func (a *Action) Execute() domain.Result {
 
 		a.success()
 		return res, nil
-	}, a.Tries)
+	}, a.Tries, 250*time.Millisecond)
 
 	r, _ := retry(context.Background())
 	res := r.(Result)

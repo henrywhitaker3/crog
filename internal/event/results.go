@@ -25,6 +25,12 @@ func (a *ResultLogger) Handle(e events.Event) error {
 			fmt.Sprintf("got stdout:\n%s", r.GetStdout()),
 		),
 	)
+	log.Log.Debug(
+		actionLogFormat(
+			r.GetAction(),
+			fmt.Sprintf("attempts:\n%d", r.GetTries()),
+		),
+	)
 	if r.GetErr() != nil {
 		log.Log.Error(actionLogFormat(r.GetAction(), r.GetErr().Error()))
 	} else {

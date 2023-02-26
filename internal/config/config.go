@@ -86,11 +86,9 @@ func (cfg *Config) Validate() error {
 	}
 
 	for i, action := range cfg.Actions {
-		fmt.Println(action)
 		if err := action.Validate(); err != nil {
 			return fmt.Errorf("actions[%d]: %s", i, err)
 		}
-		fmt.Println(action)
 	}
 
 	for i, remote := range cfg.Remotes {

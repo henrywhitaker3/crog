@@ -29,7 +29,6 @@ func Validate(item any) error {
 				if err := reflections.SetField(item, field.Name(), val); err != nil {
 					return err
 				}
-				fmt.Printf("setting %s to %d\n", field.Name(), val)
 			case "bool":
 				val, err := strconv.ParseBool(getDefault(field))
 				if err != nil {

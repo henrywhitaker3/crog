@@ -1,8 +1,6 @@
 package cli
 
 import (
-	"os"
-
 	"github.com/pterm/pterm"
 )
 
@@ -12,7 +10,6 @@ func SingleChoice(options []string) (string, error) {
 
 func ErrorExit(err error) {
 	pterm.Error.Printfln("%s", err)
-	os.Exit(1)
 }
 
 func Printfln(format string, a ...any) {
