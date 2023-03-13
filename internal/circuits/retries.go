@@ -6,8 +6,6 @@ import (
 	"time"
 )
 
-type Effector func(context.Context) (any, error)
-
 func Retry(e Effector, tries int, delay time.Duration) Effector {
 	return func(ctx context.Context) (any, error) {
 		for i := 0; i < tries; i++ {
