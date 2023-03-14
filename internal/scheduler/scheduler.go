@@ -26,7 +26,7 @@ func (s *Scheduler) Start() error {
 
 	for _, action := range s.actions {
 		s.scheduler.Cron(action.Cron).Do(runAction, action)
-		event.Emit(events.Event{Tag: "ActionScheduled", Data: &action})
+		event.Emit(events.Event{Tag: "ActionScheduled", Data: action})
 	}
 
 	s.scheduler.StartAsync()
@@ -41,9 +41,9 @@ func (s *Scheduler) Stop() error {
 	return nil
 }
 
-func runAction(action action.Action) {
-	event.Emit(events.Event{Tag: "RunScheduledAction", Data: &action})
-	event.Emit(events.Event{Tag: "ActionPreflight", Data: &action})
+func runAction(action *action.Action) {
+	event.Emit(events.Event{Tag: "RunScheduledAction", Data: action})
+	event.Emit(events.Event{Tag: "ActionPreflight", Data: action})
 
 	res := action.Execute()
 

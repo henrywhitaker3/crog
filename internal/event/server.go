@@ -8,7 +8,7 @@ import (
 type ServerStartedLogger struct{}
 
 func (s *ServerStartedLogger) Handle(e events.Event) error {
-	log.Log.Debugf("Starting grpc server on %s", e.Data)
+	log.Log.Infof("Starting grpc server on %s", e.Data)
 	return nil
 }
 
