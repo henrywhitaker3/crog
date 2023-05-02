@@ -1,6 +1,5 @@
 /*
 Copyright © 2023 Henry Whitaker <henrywhitaker3@outlook.com>
-
 */
 package main
 
@@ -42,6 +41,10 @@ func main() {
 
 func getConfigFilePath(args []string) string {
 	path := "crog.yaml"
+
+	if val, ok := os.LookupEnv("CROG_CONFIG"); ok {
+		return val
+	}
 
 	for i, arg := range args {
 		if arg == "-c" || arg == "--config" {
