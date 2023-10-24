@@ -43,7 +43,6 @@ func (a *Action) Execute() domain.Result {
 		}
 
 		if code != a.Code {
-			a.fail()
 			res.Err = ActionFailed{Expected: a.Code, Actual: code}
 			return res, res.Err
 		}
@@ -52,9 +51,13 @@ func (a *Action) Execute() domain.Result {
 		return res, nil
 	}, a.Tries, 250*time.Millisecond)
 
-	r, _ := retry(context.Background())
+	r, err := retry(context.Background())
 	res := r.(Result)
 	res.Tries = tries
+
+	if err != nil {
+		a.fail()
+	}
 
 	return res
 }
